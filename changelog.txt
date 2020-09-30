@@ -1,2 +1,9 @@
-Welcome to Omega!
 This bot is currently work in progress
+
+prefix: o!
+
+Available commands:
+- help
+- changelog
+- poll <Question> [options split with a newline]
+- ping
