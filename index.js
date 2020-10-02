@@ -40,10 +40,11 @@ bot.on('message', message => {
             break;
         case 'ping':
             message.channel.send(main.ping(bot));
+            break;
     }
 })
 
 //execute when the bot is added to a guild
 bot.on('guildCreate', guild => {
-
+    dataManager.newGuild(bot, guild);
 })
