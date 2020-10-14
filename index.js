@@ -22,9 +22,12 @@ const dataManager = require('./modules/datamanagement.js');
 
 bot.on('ready', () => {
     console.log('bot is online');
+    /*bot.channels.cache.get(config.storageChannel).messages.fetch({limit: 100}).then(messages=> {
+        console.log(messages.filter(m => m.content === 'e').first().author.tag);
+    })*/
 })
 
-bot.on('message', message => {
+bot.on('message',async message => {
     //command handler
     if (!message.content.startsWith(config.prefix)) return 0;
     let args = message.content.substring(config.prefix.length).split(' ');
@@ -41,10 +44,14 @@ bot.on('message', message => {
         case 'ping':
             message.channel.send(main.ping(bot));
             break;
+        case 'fetch':
+            message.reply('fetching all messages in this channel, this may take some time');
+            let results = await dataManager.fetchAllChannelMessages(message.channel);
+            results = results.reverse();
+            message.reply(`fetch complete. ${results.length} messages were fetched`)
+            for(i = 0; i < results.length; i++){
+                console.log(`${results[i].author.tag}: ${results[i].content}`)
+            }
+            break;
     }
-})
-
-//execute when the bot is added to a guild
-bot.on('guildCreate', guild => {
-    dataManager.newGuild(bot, guild);
 })

@@ -7,3 +7,12 @@ Available commands:
 - changelog
 - poll <Question> [options split with a newline]
 - ping
+
+WIP Modules:
+- Data Storage (critical)
+
+Planned Modules:
+- Moderation
+- Automod
+- Support System (tickets)
+- Antiraid
