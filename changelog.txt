@@ -7,6 +7,7 @@ Available commands:
 - changelog
 - poll <Question> [options split with a newline]
 - ping
+- support
 
 WIP Modules:
 - Data Storage (critical)

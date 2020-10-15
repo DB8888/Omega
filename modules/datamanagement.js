@@ -13,7 +13,7 @@ exports.fetchAllChannelMessages = async (channel) => {
     var sum_messages = [];
     let last_id;
     while (true) {
-        var options = { limit: 100}
+        var options = { limit: 100 }
         if (last_id) {
             options.before = last_id;
         }
@@ -21,7 +21,7 @@ exports.fetchAllChannelMessages = async (channel) => {
         sum_messages.push(...messages.array());
         last_id = messages.last().id;
 
-        if(messages.size != options.limit || sum_messages.length >= limit) {
+        if (messages.size != options.limit || sum_messages.length >= limit) {
             break;
         }
     }

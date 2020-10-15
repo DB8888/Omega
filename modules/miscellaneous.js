@@ -4,7 +4,7 @@ const Discord = require('discord.js');
 //poll command
 //note: sending messages directly from function because it needs to add reactions.
 exports.poll = (args, message) => {
-    if (!args[1]) return message.channel.send(`To create a new poll, do ${config.prefix} poll <Question> [options split with a newline]`);
+    if (!args[1]) return message.channel.send(`To create a new poll, do ${config.prefix}poll <Question> [options split with a newline]`);
     if (args.slice(1).join(' ').split('\n').length <= 1) {
         let question = args.slice(1).join(' ');
         message.delete({ timeout: 1 });

@@ -15,7 +15,7 @@ exports.help = () => {
         .setTitle('Omega Help Menu')
         .setColor(config.embedColour)
         .setDescription(`Prefix: ${config.prefix}`)
-        .addField('Main Module', `Changelog - Prints the bot's most recent changelog\nHelp - Prints help info\nPing - Returns client latency`)
+        .addField('Main Module', `Changelog - Prints the bot's most recent changelog\nHelp - Prints help info\nPing - Returns client latency\nSupport - Sends an invite to my support server`)
         .addField('Miscellaneous Module', `Poll <question> [options split with a newline] - Creates a poll.`)
     return help;
 }
