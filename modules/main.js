@@ -16,7 +16,7 @@ exports.help = () => {
         .setColor(config.embedColour)
         .setDescription(`Prefix: ${config.prefix}`)
         .addField('Main Module', `Changelog - Prints the bot's most recent changelog\nHelp - Prints help info\nPing - Returns client latency\nSupport - Sends an invite to my support server`)
-        .addField('Miscellaneous Module', `Poll <question> [options split with a newline] - Creates a poll.`)
+        .addField('Miscellaneous Module', `Poll <question> [options split with a newline] - Creates a poll\nServerinfo - Returns basic server info\nClear <# of messages> - Clear a certain number of messages in a channel.`)
     return help;
 }
 

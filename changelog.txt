@@ -1,4 +1,4 @@
-This bot is currently work in progress
+Version BETA 1.0.0
 
 prefix: o!
 
@@ -8,9 +8,11 @@ Available commands:
 - poll <Question> [options split with a newline]
 - ping
 - support
+- serverinfo
+- clear <# of messages>
 
 WIP Modules:
-- Data Storage (critical)
+- Data Storage
 
 Planned Modules:
 - Moderation

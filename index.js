@@ -62,7 +62,15 @@ bot.on('message', async message => {
                 message.react('✅');
                 break;
             case 'fetcherror':
-                message.channel.send(await errorHandler.fetchError(args[1], bot));
+                if (message.author.id === config.owner) {
+                    message.channel.send(await errorHandler.fetchError(args[1], bot));
+                }
+                break;
+            case 'serverinfo':
+                message.channel.send(await misc.serverInfo(message.guild));
+                break;
+            case 'clear':
+                await misc.clear(message.channel, message.member, args[1])
                 break;
         }
     } catch (err) {
