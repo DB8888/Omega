@@ -22,12 +22,18 @@ const dataManager = require('./modules/datamanagement.js');
 const supportServer = require('./modules/supportserverprocesses.js');
 const errorHandler = require('./modules/errorhandling.js');
 
+//configure a web app, so that the repl can be kept alive
+const express = require('express');
+const app = express();
+const port = 3000;
+app.get('/', (req, res) => res.send("e"));
+
+app.listen(port, () => console.log(`web app listening at http://localhost:${port}`));
+
+//execute when the application has logged in
 bot.on('ready', () => {
     console.log('bot is online');
     supportServer.runProcesses(bot);
-    /*bot.channels.cache.get(config.storageChannel).messages.fetch({limit: 100}).then(messages=> {
-        console.log(messages.filter(m => m.content === 'e').first().author.tag);
-    })*/
 })
 
 bot.on('message', async message => {
