@@ -10,5 +10,5 @@ exports.runProcesses = (bot) => {
 
 
         exports.runProcesses(bot);
-    }, 12000);
+    }, 600000);
 }
