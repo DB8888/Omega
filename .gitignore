@@ -4,6 +4,9 @@
 # Environment Variables
 .env
 
+# Repl.it config file
+.replit
+
 # Object files
 *.o
 *.ko
