@@ -70,7 +70,9 @@ exports.clear = async (channel, member, amount) => {
 
     let toRemove = await dataManager.fetchAllChannelMessages(channel, 150);
 
-    if (toRemove[amount] === undefined) return channel.send(`There doesn't seem to be that many messages in this channel.`)
+    if (toRemove[amount] === undefined) {
+        amount = toRemove.length - 1;
+    }
 
     if (toRemove[amount].createdTimestamp < (Date.now() - 1209600000)) return channel.send(':x: Cannot clear messages older than 14 days (Discord API Limitation)');
 

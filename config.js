@@ -1,5 +1,11 @@
+require('dotenv').config()
+
 //prefix
-exports.prefix = 'o!';
+if (process.env.TEST === '1') {
+    exports.prefix = 'omegatest!'
+} else {
+    exports.prefix = 'o!';
+}
 
 //owner
 exports.owner = '716779626759716914';
