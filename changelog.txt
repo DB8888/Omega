@@ -2,16 +2,6 @@ Version 1.1.1
 
 prefix: o!
 
-Available commands:
-- help
-- changelog
-- poll <Question> [options split with a newline]
-- ping
-- support
-- serverinfo
-- clear <# of messages>
-- invite
-
 WIP Modules:
 - Data Storage
 
