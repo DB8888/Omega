@@ -21,6 +21,7 @@ const misc = require('./modules/miscellaneous.js');
 const dataManager = require('./modules/datamanagement.js');
 const supportServer = require('./modules/supportserverprocesses.js');
 const errorHandler = require('./modules/errorhandling.js');
+const moderation = require('./modules/moderation.js')
 
 //configure a web app, so that the repl can be kept alive
 const express = require('express');
@@ -73,6 +74,9 @@ bot.on('message', async message => {
             case 'invite':
                 message.author.send(main.invite());
                 message.react('✅');
+                break;
+            case 'modrole':
+                message.channel.send(await moderation.setModRole(message.guild, message.mentions.roles, message.member, args, bot));
                 break;
         }
     } catch (err) {
