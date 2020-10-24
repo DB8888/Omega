@@ -57,5 +57,6 @@ exports.deleteEntry = async (key, location, bot) => {
 }
 
 exports.newEntry = async(key, value, location, bot) => {
+    await exports.deleteEntry(key, location, bot)
     bot.channels.cache.get(location).send(`${key}\n${value}`);
 }

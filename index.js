@@ -78,6 +78,9 @@ bot.on('message', async message => {
             case 'modrole':
                 message.channel.send(await moderation.setModRole(message.guild, message.mentions.roles, message.member, args, bot));
                 break;
+            case 'modlog':
+                message.channel.send(await moderation.modLog(message.guild, message.channel, message.member, bot))
+                break;
         }
     } catch (err) {
         message.channel.send(await errorHandler.reportError(err, message.content, bot));

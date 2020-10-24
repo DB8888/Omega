@@ -32,3 +32,4 @@ exports.botInviteLink = 'https://discord.com/oauth2/authorize?client_id=76086924
 
 //Data storage
 exports.modRoleStorageChannel = '769525304066048010';
+exports.modLogChannelsStorageChannel = '769592157115777084';
