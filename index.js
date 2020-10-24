@@ -55,16 +55,6 @@ bot.on('message', async message => {
             case 'ping':
                 message.channel.send(main.ping(bot));
                 break;
-            case 'fetch':
-                return; //might be used later
-                message.reply('fetching all messages in this channel, this may take some time');
-                let results = await dataManager.fetchAllChannelMessages(message.channel);
-                results = results.reverse();
-                message.reply(`fetch complete. ${results.length} messages were fetched`)
-                for (i = 0; i < results.length; i++) {
-                    console.log(`${results[i].author.tag}: ${results[i].content}`)
-                }
-                break;
             case 'support':
                 message.author.send(config.supportServerInviteLink);
                 message.react('✅');

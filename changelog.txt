@@ -1,9 +1,12 @@
-Version 1.1.1
+Version 2.0.0
+
+- Introduced some basic moderation features
 
 prefix: o!
 
 WIP Modules:
 - Data Storage
+- Moderation
 
 Planned Modules:
 - Moderation
