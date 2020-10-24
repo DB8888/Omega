@@ -37,6 +37,7 @@ bot.on('ready', () => {
 })
 
 bot.on('message', async message => {
+    if(message.author.bot) return 0;
     //command handler
     if (!message.content.startsWith(config.prefix)) return 0;
     let args = message.content.substring(config.prefix.length).split(' ');
