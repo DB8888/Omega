@@ -55,6 +55,7 @@ bot.on('message', async message => {
                 message.channel.send(main.ping(bot));
                 break;
             case 'fetch':
+                return; //might be used later
                 message.reply('fetching all messages in this channel, this may take some time');
                 let results = await dataManager.fetchAllChannelMessages(message.channel);
                 results = results.reverse();
@@ -77,6 +78,10 @@ bot.on('message', async message => {
                 break;
             case 'clear':
                 await misc.clear(message.channel, message.member, args[1])
+                break;
+            case 'invite':
+                message.author.send(main.invite());
+                message.react('✅');
                 break;
         }
     } catch (err) {

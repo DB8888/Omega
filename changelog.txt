@@ -1,4 +1,4 @@
-Version BETA 1.0.0
+Version 1.1.0
 
 prefix: o!
 
@@ -10,6 +10,7 @@ Available commands:
 - support
 - serverinfo
 - clear <# of messages>
+- invite
 
 WIP Modules:
 - Data Storage

@@ -25,4 +25,7 @@ exports.supportServerGuildCountChannel = '766059397570232340';
 exports.supportServerInviteLink = 'https://discord.gg/AKPkZwR';
 
 //Support server error reports channel
-exports.supportServerReportsChannel = '766370859718934528'
+exports.supportServerReportsChannel = '766370859718934528';
+
+//Bot invite link
+exports.botInviteLink = 'https://discord.com/oauth2/authorize?client_id=760869247005229096&scope=bot&permissions=289870';

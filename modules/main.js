@@ -15,7 +15,7 @@ exports.help = () => {
         .setTitle('Omega Help Menu')
         .setColor(config.embedColour)
         .setDescription(`Prefix: ${config.prefix}`)
-        .addField('Main Module', `Changelog - Prints the bot's most recent changelog\nHelp - Prints help info\nPing - Returns client latency\nSupport - Sends an invite to my support server`)
+        .addField('Main Module', `Changelog - Prints the bot's most recent changelog\nHelp - Prints help info\nPing - Returns client latency\nSupport - Sends an invite to my support server\nInvite - Sends a link to invite Omega to your server`)
         .addField('Miscellaneous Module', `Poll <question> [options split with a newline] - Creates a poll\nServerinfo - Returns basic server info\nClear <# of messages> - Clear a certain number of messages in a channel.`)
     return help;
 }
@@ -23,4 +23,8 @@ exports.help = () => {
 //ping command
 exports.ping = (bot) => {
     return `Pong! Latency is ${bot.ws.ping}ms.`;
+}
+
+exports.invite = () => {
+    return `Invite me to your server at\n${config.botInviteLink}`;
 }
