@@ -12,7 +12,7 @@ exports.poll = (args, message) => {
         const poll = new Discord.MessageEmbed()
             .setColor(config.embedColour)
             .setTitle('New Poll!')
-            .setDescription(`**${question}**\n\nTo vote yes, react with ✅\nTo vote no, react with ❌\nIf you really don't care, react with 🤷`)
+            .setDescription(`**${question}**\n\nTo vote yes, react with ✅\nTo vote no, react with ❌\nIf you are unsure/don't care, react with 🤷`)
             .setFooter(`Poll created by ${message.author.tag}`)
         message.channel.send(poll).then(messageReaction => {
             messageReaction.react('✅');
