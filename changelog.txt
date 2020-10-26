@@ -10,10 +10,11 @@ Version 2.0.0
 
 prefix: o!
 
-WIP Modules:
+WIP Features:
 - Antiraid
+- Moderation - temporary punishments
 
-Planned Modules:
+Planned Features:
 - Automod
 - Support System (tickets)
 - Antiraid

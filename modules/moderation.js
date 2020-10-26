@@ -95,7 +95,7 @@ exports.setReason = async (guild, member, message, bot) => {
         if (toChange.targets.length === 0 || toChange.reason === 'Unspecified') return `Command usage: ${config.prefix}reason <logIDs> <reason>`;
         if (toChange.reason.length > 1000) return `The reason must not exceed 1000 characters. Currently, it is ${toChange.reason.length}.`;
 
-        for (i = 0; i < toChange.targets.length; i++) {
+        for (let i = 0; i < toChange.targets.length; i++) {
             await modlogChannel.messages.fetch(toChange.targets[i])
                 .then(async msg => {
                     var contentSections = msg.content.split('\n');
@@ -133,7 +133,7 @@ exports.kick = async (guild, targets, member, reason, bot) => {
             if (targetMember.kickable) {
                 let targetMemberModRole = await exports.queryModRole(guild, targetMember, bot);
                 if ((targetMemberModRole || targetMember.hasPermission('ADMINISTRATOR') || targetMember.hasPermission('KICK_MEMBERS') || targetMember.hasPermission('BAN_MEMBERS')) && !member.hasPermission('ADMINISTRATOR')) {
-                    outputMessage += `Unable to kick \`${targetMember.user.tag}\`: Only administrators can kick people with the moderator role and/or admin perms.\n`
+                    outputMessage += `Unable to kick \`${targetMember.user.tag}\`: Only administrators can kick people with the moderator role and/or moderator permissions.\n`
                 } else {
                     await targetMember.user.send(`You were kicked from ${targetMember.guild.name} by ${member.user.tag}.\nReason: \`${reason}\``).catch(err => { });
                     await targetMember.kick(`[${member.user.tag}] ${reason}`);
@@ -170,7 +170,7 @@ exports.ban = async (guild, targets, member, reason, bot) => {
                     if (targetMember.bannable) {
                         let targetMemberModRole = await exports.queryModRole(guild, targetMember, bot);
                         if ((targetMemberModRole || targetMember.hasPermission('ADMINISTRATOR') || targetMember.hasPermission('KICK_MEMBERS') || targetMember.hasPermission('BAN_MEMBERS')) && !member.hasPermission('ADMINISTRATOR')) {
-                            outputMessage += `Unable to ban \`${targetMember.user.tag}\`: Only administrators can ban people with the moderator role and/or admin perms.\n`
+                            outputMessage += `Unable to ban \`${targetMember.user.tag}\`: Only administrators can ban people with the moderator role and/or moderator permissions.\n`
                         } else {
                             await targetMember.user.send(`You were banned from ${targetMember.guild.name} by ${member.user.tag}.\nReason: \`${reason}\``).catch(err => { });
                             await targetMember.ban({ reason: `[${member.user.tag}] ${reason}` });
@@ -216,7 +216,7 @@ exports.unban = async (guild, targets, member, reason, bot) => {
                 })
                 
             }else{
-                outputMessage += `Unable to unban \`${targets[i]}\`: They don't seem to be banned.`
+                outputMessage += `Unable to unban \`${targets[i]}\`: They don't seem to be banned.\n`
             }
         })
     }
