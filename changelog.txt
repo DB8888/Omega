@@ -1,5 +1,4 @@
 Version 2.0.0
-
 - Introduced some basic moderation features:
 - Kick
 - Ban
@@ -17,4 +16,3 @@ WIP Features:
 Planned Features:
 - Automod
 - Support System (tickets)
-- Antiraid
