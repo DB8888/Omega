@@ -89,6 +89,10 @@ bot.on('message', async message => {
                 var ban = await moderation.extractTargetsAndReason(message)
                 message.channel.send(await moderation.ban(message.guild, ban.targets, message.member, ban.reason, bot));
                 break;
+            case 'unban':
+                var unban = await moderation.extractTargetsAndReason(message)
+                message.channel.send(await moderation.unban(message.guild, unban.targets, message.member, unban.reason, bot));
+                break;
             case 'reason':
                 message.channel.send(await moderation.setReason(message.guild, message.member, message, bot));
                 break;
