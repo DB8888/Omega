@@ -79,10 +79,22 @@ bot.on('message', async message => {
                 message.channel.send(await moderation.setModRole(message.guild, message.mentions.roles, message.member, args, bot));
                 break;
             case 'modlog':
-                message.channel.send(await moderation.modLog(message.guild, message.channel, message.member, bot))
+                message.channel.send(await moderation.modLog(message.guild, message.channel, message.member, bot, args))
+                break;
+            case 'kick':
+                var kick = await moderation.extractTargetsAndReason(message)
+                message.channel.send(await moderation.kick(message.guild, kick.targets, message.member, kick.reason, bot));
+                break;
+            case 'ban':
+                var ban = await moderation.extractTargetsAndReason(message)
+                message.channel.send(await moderation.ban(message.guild, ban.targets, message.member, ban.reason, bot));
+                break;
+            case 'reason':
+                message.channel.send(await moderation.setReason(message.guild, message.member, message, bot));
                 break;
         }
     } catch (err) {
         message.channel.send(await errorHandler.reportError(err, message.content, bot));
+        console.log(err);
     }
 })
