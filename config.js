@@ -29,3 +29,7 @@ exports.supportServerReportsChannel = '766370859718934528';
 
 //Bot invite link
 exports.botInviteLink = 'https://discord.com/oauth2/authorize?client_id=760869247005229096&scope=bot&permissions=289870';
+
+//Data storage
+exports.modRoleStorageChannel = '769525304066048010';
+exports.modLogChannelsStorageChannel = '769592157115777084';

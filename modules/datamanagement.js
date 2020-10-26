@@ -6,7 +6,7 @@ const Discord = require('discord.js');
 const config = require('../config.js');
 
 
-//fetch all messages in a channel (currently capped at 10000)
+//fetch all messages in a channel (currently capped at 12000)
 //always use the await keyword when using this function
 exports.fetchAllChannelMessages = async (channel, limit) => {
     if (!limit) { limit = 12000; }//to prevent api spam and such, defaults to 12000
@@ -27,4 +27,36 @@ exports.fetchAllChannelMessages = async (channel, limit) => {
     }
 
     return sum_messages;//returns an array;
+}
+
+//fetch a value from a channel with a key. Messages are in the format "key\nvalue"
+exports.getValue = async (key, location, bot) => {
+    var fetchedData = await exports.fetchAllChannelMessages(bot.channels.cache.get(location));
+    var value = null;
+    for (i = 0; i < fetchedData.length; i++) {
+        let entry = fetchedData[i].content.split('\n');
+        if (entry[0] === key) {
+            value = entry[1];
+            break;
+        }
+
+    }
+    return value;
+}
+
+//delete a data entry
+exports.deleteEntry = async (key, location, bot) => {
+    var fetchedData = await exports.fetchAllChannelMessages(bot.channels.cache.get(location));
+    for (i = 0; i < fetchedData.length; i++) {
+        let entry = fetchedData[i].content.split('\n');
+        if (entry[0] === key) {
+            fetchedData[i].delete();
+        }
+
+    }
+}
+
+exports.writeEntry = async(key, value, location, bot) => {
+    await exports.deleteEntry(key, location, bot)
+    bot.channels.cache.get(location).send(`${key}\n${value}`);
 }

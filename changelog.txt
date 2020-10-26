@@ -1,12 +1,20 @@
-Version 1.1.1
+Version 2.0.0
+
+- Introduced some basic moderation features:
+- Kick
+- Ban
+- Unban
+- Modrole - allows a role without moderator permissions to use moderator commands
+- Modlog - logs all moderator actions to a specific text channel
+- Reason - allows the setting of a reason for specific moderator actions after they are executed
 
 prefix: o!
 
-WIP Modules:
-- Data Storage
+WIP Features:
+- Antiraid
+- Moderation - temporary punishments
 
-Planned Modules:
-- Moderation
+Planned Features:
 - Automod
 - Support System (tickets)
 - Antiraid

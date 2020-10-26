@@ -21,6 +21,7 @@ const misc = require('./modules/miscellaneous.js');
 const dataManager = require('./modules/datamanagement.js');
 const supportServer = require('./modules/supportserverprocesses.js');
 const errorHandler = require('./modules/errorhandling.js');
+const moderation = require('./modules/moderation.js')
 
 //configure a web app, so that the repl can be kept alive
 const express = require('express');
@@ -55,16 +56,6 @@ bot.on('message', async message => {
             case 'ping':
                 message.channel.send(main.ping(bot));
                 break;
-            case 'fetch':
-                return; //might be used later
-                message.reply('fetching all messages in this channel, this may take some time');
-                let results = await dataManager.fetchAllChannelMessages(message.channel);
-                results = results.reverse();
-                message.reply(`fetch complete. ${results.length} messages were fetched`)
-                for (i = 0; i < results.length; i++) {
-                    console.log(`${results[i].author.tag}: ${results[i].content}`)
-                }
-                break;
             case 'support':
                 message.author.send(config.supportServerInviteLink);
                 message.react('✅');
@@ -84,8 +75,30 @@ bot.on('message', async message => {
                 message.author.send(main.invite());
                 message.react('✅');
                 break;
+            case 'modrole':
+                message.channel.send(await moderation.setModRole(message.guild, message.mentions.roles, message.member, args, bot));
+                break;
+            case 'modlog':
+                message.channel.send(await moderation.modLog(message.guild, message.channel, message.member, bot, args))
+                break;
+            case 'kick':
+                var kick = await moderation.extractTargetsAndReason(message)
+                message.channel.send(await moderation.kick(message.guild, kick.targets, message.member, kick.reason, bot));
+                break;
+            case 'ban':
+                var ban = await moderation.extractTargetsAndReason(message)
+                message.channel.send(await moderation.ban(message.guild, ban.targets, message.member, ban.reason, bot));
+                break;
+            case 'unban':
+                var unban = await moderation.extractTargetsAndReason(message)
+                message.channel.send(await moderation.unban(message.guild, unban.targets, message.member, unban.reason, bot));
+                break;
+            case 'reason':
+                message.channel.send(await moderation.setReason(message.guild, message.member, message, bot));
+                break;
         }
     } catch (err) {
         message.channel.send(await errorHandler.reportError(err, message.content, bot));
+        console.log(err);
     }
 })
