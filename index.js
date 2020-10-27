@@ -18,10 +18,10 @@ const config = require('./config.js');
 //Import Modules
 const main = require('./modules/main.js');
 const misc = require('./modules/miscellaneous.js');
-const dataManager = require('./modules/datamanagement.js');
 const supportServer = require('./modules/supportserverprocesses.js');
 const errorHandler = require('./modules/errorhandling.js');
 const moderation = require('./modules/moderation.js')
+const ownercommands = require('./modules/ownercommands.js')
 
 //configure a web app, so that the repl can be kept alive
 const express = require('express');
@@ -95,6 +95,12 @@ bot.on('message', async message => {
                 break;
             case 'reason':
                 message.channel.send(await moderation.setReason(message.guild, message.member, message, bot));
+                break;
+            case 'listservers':
+                ownercommands.listServers(message.author, bot, message.channel);
+                break;
+            case 'eval':
+                ownercommands.eval(message.author, bot, message, args);
                 break;
         }
     } catch (err) {
