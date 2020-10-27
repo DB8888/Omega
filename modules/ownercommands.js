@@ -10,8 +10,9 @@ exports.listServers = async (executor, bot, channel) => {
 
 exports.eval = async (executor, bot, message, args) => {
     if (executor.id != config.owner) return 0;
+    let evaled;
     try {
-        let evaled = eval(args.slice(1).join(' '));
+        evaled = eval(args.slice(1).join(' '));
     } catch (error) {
         message.channel.send(`ERROR: \`\`\`\n${error}\n\`\`\``)
     }
