@@ -16,3 +16,5 @@ WIP Features:
 Planned Features:
 - Automod
 - Support System (tickets)
+
+If you notice any issues with the bot, please do not hesitate to join our support server or open an issue on GitHub (DB8888/Omega).
