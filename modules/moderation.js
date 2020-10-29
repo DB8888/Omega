@@ -128,7 +128,7 @@ exports.kick = async (guild, targets, member, reason, bot) => {
     else if (targets.length === 0) return `Command usage: ${config.prefix}kick <@mentions/IDs> [reason]`;
     else if (!guild.me.hasPermission('KICK_MEMBERS')) return `I require the \`Kick Members\` permission to execute this command.`;
     else if (targets.length > 10) return `You may only kick 10 members at a time.`;
-    else if (reason.length > 1000) return `The kick reason must not exceed 1000 characters. Currently, it is ${reason.length}.`;
+    else if (reason.length > 500) return `The kick reason must not exceed 500 characters. Currently, it is ${reason.length}. You can set a longer reason afterwards with \`${config.prefix}reason\``;
     for (let i = 0; i < targets.length; i++) {
         let targetMember = guild.member(targets[i]);
         if (targetMember) {
@@ -161,7 +161,7 @@ exports.ban = async (guild, targets, member, reason, bot) => {
     else if (targets.length === 0) return `Command usage: ${config.prefix}ban <@mentions/IDs> [reason]`;
     else if (!guild.me.hasPermission('BAN_MEMBERS')) return `I require the \`Ban Members\` permission to execute this command.`;
     else if (targets.length > 10) return `You may only ban 10 users at a time.`;
-    else if (reason.length > 1000) return `The ban reason must not exceed 1000 characters. Currently, it is ${reason.length}.`;
+    else if (reason.length > 500) return `The ban reason must not exceed 500 characters. Currently, it is ${reason.length}. You can set a longer reason afterwards with \`${config.prefix}reason\``;
     for (let i = 0; i < targets.length; i++) {
         await guild.fetchBans().then(async bans => {//check if user is already banned
             if (bans.has(targets[i])) {
@@ -208,7 +208,7 @@ exports.unban = async (guild, targets, member, reason, bot) => {
     else if (targets.length === 0) return `Command usage: ${config.prefix}unban <@mentions/IDs> [reason]`;
     else if (!guild.me.hasPermission('BAN_MEMBERS')) return `I require the \`Ban Members\` permission to execute this command.`;
     else if (targets.length > 10) return `You may only unban 10 users at a time.`;
-    else if (reason.length > 1000) return `The unban reason must not exceed 1000 characters. Currently, it is ${reason.length}.`;
+    else if (reason.length > 500) return `The unban reason must not exceed 500 characters. Currently, it is ${reason.length}. You can set a longer reason afterwards with \`${config.prefix}reason\``;
     for (let i = 0; i <targets.length; i++){
         await guild.fetchBans().then(async bans => {
             if(bans.has(targets[i])) {
