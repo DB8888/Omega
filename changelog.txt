@@ -1,3 +1,6 @@
+Version 2.1.1
+- Updated permissions for the reason command
+
 Version 2.1.0
 - Kicks, bans and unbans not executed using the bot will show up in the modlog
 - The modlog command requires the bot to have the VIEW_AUDIT_LOG permission

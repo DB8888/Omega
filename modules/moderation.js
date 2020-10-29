@@ -87,8 +87,9 @@ exports.modLogEvent = async (bot, guild, type, user, moderator, reason) => {
 exports.setReason = async (guild, member, message, bot) => {
     var outputMessage = '';
     var modlogChannel = bot.channels.cache.get(await datamanager.getValue(guild.id, config.modLogChannelsStorageChannel, bot));
+    if(!modlogChannel) return message.channel.send(`This server doesn't have a modlog channel`);
     var roleQuery = await exports.queryModRole(guild, member, bot);
-    if (roleQuery === false && !member.hasPermission('ADMINISTRATOR')) return `Only moderators can execute this command.`;
+    if (roleQuery === false && !(member.hasPermission('ADMINISTRATOR') || member.hasPermission('BAN_MEMBERS') || member.hasPermission('KICK_MEMBERS'))) return `Only moderators can execute this command.`;
     else {
         var toChange = await exports.extractTargetsAndReason(message);
 
