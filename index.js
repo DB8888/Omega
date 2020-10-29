@@ -38,7 +38,7 @@ bot.on('ready', () => {
 })
 
 bot.on('message', async message => {
-    if(message.author.bot) return 0;
+    if (message.author.bot) return 0;
     //command handler
     if (!message.content.startsWith(config.prefix)) return 0;
     let args = message.content.substring(config.prefix.length).split(' ');
@@ -108,3 +108,80 @@ bot.on('message', async message => {
         console.log(err);
     }
 })
+
+bot.on('guildBanAdd', async (guild, user) => {//execute when someone is banned, to catch bans not made by the bot
+    var moderator;
+    const fetchedLogs = await guild.fetchAuditLogs({
+        limit: 1,
+        type: 'MEMBER_BAN_ADD'
+    })
+
+    const banLog = fetchedLogs.entries.first();
+
+    if (!banLog) {
+        moderator = { tag: 'Unknown' }//adding tag property because this is how the modlog function gets the mod's info
+    }
+
+    const { executor, target } = banLog;
+
+    moderator = executor;
+
+    if (target.id === user.id) {
+        if (moderator === bot.user) return 0;
+        moderation.modLogEvent(bot, guild, 'BAN', user, moderator, banLog.reason ? banLog.reason : 'Unspecified');
+    } else {
+        guild.fetchBans().then(bans => {
+            var reason = bans.get(user.id).reason
+            moderator = { tag: 'Unknown' }
+            moderation.modLogEvent(bot, guild, 'BAN', user, moderator, reason ? reason : 'Unspecified');
+        })
+    }
+})
+
+bot.on('guildBanRemove', async (guild, user) => {//execute when someone is unbanned, to catch bans not made by the bot
+    var moderator;
+    const fetchedLogs = await guild.fetchAuditLogs({
+        limit: 1,
+        type: 'MEMBER_BAN_REMOVE'
+    })
+
+    const unbanLog = fetchedLogs.entries.first();
+
+    if (!unbanLog) {
+        moderator = { tag: 'Unknown' }//adding tag property because this is how the modlog function gets the mod's info
+    }
+
+    const { executor, target } = unbanLog;
+
+    moderator = executor;
+
+    if (target.id === user.id) {
+        if (moderator === bot.user) return 0;
+        moderation.modLogEvent(bot, guild, 'UNBAN', user, moderator, 'Unspecified');
+    } else {
+        moderation.modLogEvent(bot, guild, 'UNBAN', user, { tag: 'Unknown' }, 'Unspecified');
+    }
+})
+
+bot.on('guildMemberRemove', async member => {//check if a user was kicked
+    const fetchedLogs = await member.guild.fetchAuditLogs({
+        limit: 1,
+        type: 'MEMBER_KICK',
+    });
+
+    const kickLog = fetchedLogs.entries.first();
+
+
+    if (!kickLog) return 0;
+    if (kickLog.createdTimestamp < Date.now() - 5000) return 0;//ensure the last kick actually happened in the last 5 seconds
+
+
+    const { executor, target } = kickLog;
+
+
+    if (target.id === member.id) {
+        if (executor === bot.user) return 0;
+        let user = member.user;
+        moderation.modLogEvent(bot, member.guild, 'KICK', user, executor, kickLog.reason ? kickLog.reason : 'Unspecified');
+    }
+});

@@ -32,6 +32,7 @@ exports.queryModRole = async (guild, member, bot) => {
 
 //set the server modlog channel
 exports.modLog = async (guild, channel, member, bot, args) => {
+    if (!guild.me.hasPermission('VIEW_AUDIT_LOG')) return `I require the \`View Audit Log\` permission to execute this command.`;
     if (!member.hasPermission('ADMINISTRATOR')) return 'You must have the `Administrator` permission to set the modlog channel.';
     else if (args[1] === 'off') {
         await datamanager.deleteEntry(guild.id, config.modLogChannelsStorageChannel, bot);
