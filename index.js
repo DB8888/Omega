@@ -102,6 +102,9 @@ bot.on('message', async message => {
             case 'eval':
                 ownercommands.eval(message.author, bot, message, args);
                 break;
+            case 'restart':
+                ownercommands.restart(message.author, message);
+                break;
         }
     } catch (err) {
         message.channel.send(await errorHandler.reportError(err, message.content, bot));

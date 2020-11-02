@@ -18,3 +18,9 @@ exports.eval = async (executor, bot, message, args) => {
     }
     message.channel.send(`\`\`\`\n${evaled}\n\`\`\``);
 }
+
+exports.restart = async (executor, message) => {
+    if (executor.id != config.owner) return 0;
+    await message.channel.send('Restarting...');
+    process.exit();
+}
