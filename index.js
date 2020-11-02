@@ -103,7 +103,7 @@ bot.on('message', async message => {
                 ownercommands.eval(message.author, bot, message, args);
                 break;
             case 'restart':
-                ownercommands.restart(message.author, message);
+                ownercommands.restart(message.author, message, bot);
                 break;
         }
     } catch (err) {
