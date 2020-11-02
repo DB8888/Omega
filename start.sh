@@ -1,6 +1,6 @@
 while :
 do
-  echo "Starting bot..."
+  echo "[SHELL] Starting bot..."
   node .
-  echo "Bot terminated, restarting..."
+  echo "[SHELL] Bot terminated, restarting..."
 done
