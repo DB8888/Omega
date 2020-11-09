@@ -20,8 +20,8 @@ const main = require('./modules/main.js');
 const misc = require('./modules/miscellaneous.js');
 const supportServer = require('./modules/supportserverprocesses.js');
 const errorHandler = require('./modules/errorhandling.js');
-const moderation = require('./modules/moderation.js')
-const ownercommands = require('./modules/ownercommands.js')
+const moderation = require('./modules/moderation.js');
+const ownercommands = require('./modules/ownercommands.js');
 
 //configure a web app, so that the repl can be kept alive
 const express = require('express');
