@@ -21,6 +21,9 @@ exports.supportServerMemberCountChannel = '766053924381655060';
 exports.supportServerUserCountChannel = '766058816772505600';
 exports.supportServerGuildCountChannel = '766059397570232340';
 
+//Support server announcement channel
+exports.supportServerAnnouncementChannel = '770224091423834132';
+
 //Support server invite link
 exports.supportServerInviteLink = 'https://discord.gg/AKPkZwR';
 

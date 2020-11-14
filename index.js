@@ -106,6 +106,10 @@ bot.on('message', async message => {
             case 'restart':
                 ownercommands.restart(message.author, message, bot);
                 break;
+            case 'announce':
+                ownercommands.announce(args.slice(1).join(' '), bot);
+                message.react('✅');
+                break;
         }
     } catch (err) {
         message.channel.send(await errorHandler.reportError(err, message.content, bot));

@@ -24,3 +24,9 @@ exports.restart = async (executor, message, bot) => {
     await bot.destroy();
     process.exit();
 }
+
+exports.announce = async (message, bot) => {
+    bot.channels.cache.get(config.supportServerAnnouncementChannel).send(message).then(msg => {
+        //msg.crosspost();
+    })
+}
