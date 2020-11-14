@@ -1,3 +1,6 @@
+*Version 2.2.1*
+- All commits to the GitHub repo will be automatically pulled upon restart
+
 *Version 2.1.2*
 - Reduced maximum kick/ban/unban reason length to 500 characters
 
