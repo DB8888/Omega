@@ -1,4 +1,3 @@
-const Discord = require('discord.js');
 const config = require('../config.js');
 
 //Support server tasks, to be executed periodically
@@ -10,5 +9,5 @@ exports.runProcesses = (bot) => {
 
 
         exports.runProcesses(bot);
-    }, 600000);
+    }, 3600000);
 }
