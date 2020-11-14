@@ -18,7 +18,7 @@ Version 2.0.0
 - Modlog - logs all moderator actions to a specific text channel
 - Reason - allows the setting of a reason for specific moderator actions after they are executed
 
-Check here to see what we're working on currently:
+Visit here to see what we're working on currently:
 https://github.com/DB8888/Omega/projects/1
 
 If you notice any issues with the bot, please do not hesitate to join our support server or open an issue on GitHub (DB8888/Omega).
