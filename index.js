@@ -34,6 +34,7 @@ app.listen(port, () => console.log(`web app listening at http://localhost:${port
 //execute when the application has logged in
 bot.on('ready', () => {
     console.log('bot is online');
+    bot.channels.cache.get(config.startupLoggingChannel).send(':white_check_mark: Omega has started');
     supportServer.runProcesses(bot);
 })
 
