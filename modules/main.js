@@ -22,8 +22,11 @@ exports.help = () => {
 }
 
 //ping command
-exports.ping = (bot) => {
-    return `Pong! Latency is ${bot.ws.ping}ms.`;
+exports.ping = (message) => {
+    message.channel.send('Pong!').then(msg => {
+        let responseTime = msg.createdTimestamp - message.createdTimestamp;
+        msg.edit(`Pong! \`${responseTime}ms\``);
+    })
 }
 
 exports.invite = () => {

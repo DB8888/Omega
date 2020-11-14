@@ -54,7 +54,7 @@ bot.on('message', async message => {
                 misc.poll(args, message); //note: sending messages directly from function because it needs to add reactions.
                 break;
             case 'ping':
-                message.channel.send(main.ping(bot));
+                main.ping(message);
                 break;
             case 'support':
                 message.author.send(config.supportServerInviteLink);
