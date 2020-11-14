@@ -1,4 +1,3 @@
-const Discord = require('discord.js');
 const config = require('../config.js');
 const datamanager = require('./datamanagement.js');
 
