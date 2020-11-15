@@ -79,7 +79,7 @@ exports.modLogEvent = async (bot, guild, type, user, moderator, reason) => {
     else {
         modlogChannel.send('Placeholder Text').then(msg => {
             msg.edit(`**[${type}] ${user}**\nUser: ${user.tag}\nModerator: ${moderator.tag}\nReason: ${reason === 'Unspecified' ? `Responsible moderator, do \`${config.prefix}reason ${msg.id}\` to set` : reason}`);
-        })
+        }).catch(err => {})//in case the channel is deleted or something
     }
 }
 
