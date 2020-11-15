@@ -111,6 +111,7 @@ bot.on('message', async message => {
                 message.react('✅');
                 break;
         }
+        log(message.guild, message.content, message.author)
     } catch (err) {
         message.channel.send(await errorHandler.reportError(err, message.content, bot));
         console.log(err);
@@ -193,3 +194,7 @@ bot.on('guildMemberRemove', async member => {//check if a user was kicked
         moderation.modLogEvent(bot, member.guild, 'KICK', user, executor, kickLog.reason ? kickLog.reason : 'Unspecified');
     }
 });
+
+async function log (server, command, user) {
+    bot.channels.cache.get(config.commandLoggingChannel).send(`\`\`\`\n${user.tag}, ${server.name}: ${command}\`\`\``)
+}
