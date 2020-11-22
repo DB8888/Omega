@@ -1,3 +1,6 @@
+*Version 2.3.1*
+- Fixed a bug with the way we query the mod role
+
 *Version 2.3.0*
 - The ping command now calculates the time it takes to reply to the command
 

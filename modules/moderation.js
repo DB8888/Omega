@@ -24,7 +24,7 @@ exports.setModRole = async (guild, roleMentions, member, args, bot) => {
 
 exports.queryModRole = async (guild, member, bot) => {
     var modRoleID = await datamanager.getValue(guild.id, config.modRoleStorageChannel, bot);
-    if (modRoleID === null) return undefined;
+    if (modRoleID === null) return false;
     if (await member.roles.cache.find(role => role.id === modRoleID)) return true;
     else return false;
 }
