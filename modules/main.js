@@ -17,7 +17,7 @@ exports.help = () => {
         .setDescription(`Prefix: ${config.prefix}`)
         .addField('Main Module', `Changelog - Prints the bot's most recent changelog\nHelp - Prints help info\nPing - Returns client latency\nSupport - Sends an invite to my support server\nInvite - Sends a link to invite Omega to your server`)
         .addField('Miscellaneous Module', `Poll <question> [options split with a newline] - Creates a poll\nServerinfo - Returns basic server info\nClear <# of messages> - Clear a certain number of messages in a channel.`)
-        .addField('Moderation Module', `Modrole [Role Mention/ID|off] - Allows a certain role to use moderator commands, even if they don't have moderator permissions\nModlog [off] - Sets a channel to log moderator actions.\nReason <logIDs> <reason> - Allows the changing of the reason for 1 or more previous moderator actions in the mod logs\nKick <userIDs/mentions> [reason] - Kicks members from the server\nBan <userIDs/mentions> [reason] - Bans members from the server\nUnban <userIDs/mentions> [reason] - Unbans members from the server`)
+        .addField('Moderation Module', `Modrole [Role Mention/ID|off] - Allows a certain role to use moderator commands, even if they don't have moderator permissions\nModlog [off] - Sets a channel to log moderator actions.\nReason <Modlog Message IDs> <reason> - Allows the changing of the reason for 1 or more previous moderator actions in the mod logs\nKick <userIDs/mentions> [reason] - Kicks members from the server\nBan <userIDs/mentions> [reason] - Bans members from the server\nUnban <userIDs/mentions> [reason] - Unbans members from the server`)
     return help;
 }
 

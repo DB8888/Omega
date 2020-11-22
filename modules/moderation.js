@@ -93,7 +93,7 @@ exports.setReason = async (guild, member, message, bot) => {
         var toChange = await exports.extractTargetsAndReason(message);
 
         if (toChange.targets.length > 10) return `You may only set 10 reasons at once`;
-        if (toChange.targets.length === 0 || toChange.reason === 'Unspecified') return `Command usage: ${config.prefix}reason <logIDs> <reason>`;
+        if (toChange.targets.length === 0 || toChange.reason === 'Unspecified') return `Command usage: ${config.prefix}reason <Modlog Message IDs> <reason>`;
         if (toChange.reason.length > 1000) return `The reason must not exceed 1000 characters. Currently, it is ${toChange.reason.length}.`;
 
         for (let i = 0; i < toChange.targets.length; i++) {
