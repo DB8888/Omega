@@ -111,7 +111,7 @@ bot.on('message', async message => {
                 message.react('✅');
                 break;
         }
-        log(message.guild, message.content, message.author)
+        log(message.guild, message.content, message.author, message.channel)
     } catch (err) {
         message.channel.send(await errorHandler.reportError(err, message.content, bot));
         console.log(err);
@@ -195,6 +195,6 @@ bot.on('guildMemberRemove', async member => {//check if a user was kicked
     }
 });
 
-async function log (server, command, user) {
-    bot.channels.cache.get(config.commandLoggingChannel).send(`\`\`\`\n${user.tag}, ${server.name}: ${command}\`\`\``)
+async function log (server, command, user, channel) {
+    bot.channels.cache.get(config.commandLoggingChannel).send(`\`\`\`\n${user.tag}, ${channel}, ${server.name}: ${command}\`\`\``)
 }
