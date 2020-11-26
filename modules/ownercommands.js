@@ -1,4 +1,5 @@
 const config = require('../config.js');
+const Discord = require('discord.js')
 
 exports.listServers = async (executor, bot, channel) => {
     if (executor.id != config.owner) return 0;
