@@ -1,3 +1,6 @@
+*Version 2.3.2*
+- Slight improvements to help command
+
 *Version 2.3.1*
 - Fixed a bug with the way we query the mod role
 
