@@ -47,7 +47,7 @@ exports.modLog = async (guild, channel, member, bot, args) => {
 exports.extractTargetsAndReason = async (message) => {
     var targets = []; //targets fetched from arguments
     var args = message.content.split(' ').slice(1);
-    var targetsUntil; //so that the bot knows where to reason starts
+    var targetsUntil; //so that the bot knows where the reason starts
     for (i = 0; i < args.length; i++) {
         if (args[i].startsWith('<@!') && args[i].endsWith('>') && !args[i].startsWith('<@&')) {
             let id = args[i]
