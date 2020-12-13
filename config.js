@@ -40,3 +40,4 @@ exports.modLogChannelsStorageChannel = '769592157115777084';
 //logging
 exports.startupLoggingChannel = '777206414787477545';
 exports.commandLoggingChannel = '777567526217318430';
+exports.DMLoggingChannel = '787648931176775710';

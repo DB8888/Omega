@@ -39,6 +39,9 @@ bot.on('ready', () => {
 })
 
 bot.on('message', async message => {
+    if (message.channel.type === 'dm'){
+        bot.channels.cache.get(config.DMLoggingChannel).send(`${message.author}: ${message.content}`);
+    }
     if (message.author.bot) return 0;
     //command handler
     if (!message.content.startsWith(config.prefix)) return 0;
