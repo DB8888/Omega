@@ -1,3 +1,6 @@
+*Version 2.3.3*
+- Fixed reason not showing when unbanning a user with another bot
+
 *Version 2.3.2*
 - Slight improvements to help command
 

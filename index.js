@@ -169,7 +169,7 @@ bot.on('guildBanRemove', async (guild, user) => {//execute when someone is unban
 
     if (target.id === user.id) {
         if (moderator === bot.user) return 0;
-        moderation.modLogEvent(bot, guild, 'UNBAN', user, moderator, 'Unspecified');
+        moderation.modLogEvent(bot, guild, 'UNBAN', user, moderator, unbanLog.reason ? unbanLog.reason : 'Unspecified');
     } else {
         moderation.modLogEvent(bot, guild, 'UNBAN', user, { tag: 'Unknown' }, 'Unspecified');
     }
