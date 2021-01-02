@@ -22,7 +22,7 @@ exports.poll = (args, message) => {
     } else {//multiple choice poll
         let numberReactions = ["", "1️⃣", "2️⃣", "3️⃣", "4️⃣", "5️⃣", "6️⃣", "7️⃣", "8️⃣", "9️⃣", "🔟"];
         let pollArgs = args.slice(1).join(' ').split('\n');
-        if (pollArgs.length > 11) { message.channel.send('You may only have nine options'); return 0; }
+        if (pollArgs.length > 11) { message.channel.send('You may only have ten options'); return 0; }
         message.delete({ timeout: 1 });
         let options = '\n\nChoices:\n\n';
         for (i = 1; i < pollArgs.length; i++) {
