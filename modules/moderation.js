@@ -3,20 +3,20 @@ const datamanager = require('./datamanagement.js');
 
 //set/query the server mod role
 exports.setModRole = async (guild, roleMentions, member, args, bot) => {
-    var currentModRole = await guild.roles.cache.get(await datamanager.getValue(guild.id, config.modRoleStorageChannel, bot));
+    var currentModRole = await guild.roles.cache.get(await datamanager.fetchData('modRoles', {guild: guild.id}).role);
     if (!currentModRole) { currentModRole = `nope` };
     if (!args[1]) return `This server's moderator role is \`${currentModRole.name}\``;
     else if (!member.hasPermission('ADMINISTRATOR')) return 'You must have the `Administrator` permission to set the moderator role.';
     else if (roleMentions.size === 1) {
-        await datamanager.writeEntry(guild.id, roleMentions.first().id, config.modRoleStorageChannel, bot);
+        await datamanager.writeData('modRoles', {guild: guild.id, role: roleMentions.first().id}, {guild: guild.id})
         return `Mod role set to \`${roleMentions.first().name}\``;
     }
     else if (guild.roles.cache.has(args[1])) {
-        await datamanager.writeEntry(guild.id, args[1], config.modRoleStorageChannel, bot);
+        await datamanager.writeData('modRoles', {guild: guild.id, role: args[1]}, {guild: guild.id})
         return `Mod role set to \`${guild.roles.cache.get(args[1]).name}\``;
     }
     else if(args[1] === 'off') {
-        await datamanager.deleteEntry(guild.id, config.modRoleStorageChannel, bot);
+        await datamanager.deleteData('modRoles', {guild: guild.id})
         return `This server no longer has a mod role`
     }
     else return `Command usage: ${config.prefix}modrole [role mention/id]`

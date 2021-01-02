@@ -9,7 +9,8 @@ const config = require('../config')
 module.exports = async () => {
     await mongoose.connect(mongoPath, {
         useNewUrlParser: true,
-        useUnifiedTopology: true
+        useUnifiedTopology: true,
+        poolSize: 20
     })
     return mongoose;
 }
