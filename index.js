@@ -1,8 +1,3 @@
-/*
-Omega
-Author: DintyB
-*/
-
 //Configure environment variables
 require('dotenv').config();
 const token = process.env.TOKEN;
@@ -22,6 +17,10 @@ const supportServer = require('./modules/supportserverprocesses.js');
 const errorHandler = require('./modules/errorhandling.js');
 const moderation = require('./modules/moderation.js');
 const ownercommands = require('./modules/ownercommands.js');
+
+//TEMPORARY PLEASE REMOVE BEFORE COMMIT
+const datamanagement = require('./modules/datamanagement')
+datamanagement.writeData('modRoles', {guild: '1123', role: "d"}, {guild:"1123"})
 
 //configure a web app, so that the repl can be kept alive
 const express = require('express');
