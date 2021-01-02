@@ -1,3 +1,7 @@
+*Version 2.4.0*
+- Data storage migrated to MongoDB 
+- All modlog and modrole data has unfortunately been wiped
+
 *Version 2.3.3*
 - Fixed reason not showing when unbanning a user with another bot
 
