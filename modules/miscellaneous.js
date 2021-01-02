@@ -68,7 +68,7 @@ exports.clear = async (channel, member, amount) => {
     //ensure that the user is not trying to clear more than 100 messages
     if (amount > 99) return channel.send(':x: You may not clear more than 99 messages at once');
 
-    let toRemove = await dataManager.fetchAllChannelMessages(channel, 150);
+    let toRemove = await fetchAllChannelMessages(channel, 150);
 
     if (toRemove[amount] === undefined) {
         amount = toRemove.length - 1;
@@ -83,4 +83,26 @@ exports.clear = async (channel, member, amount) => {
             msg.delete();
         }, 3000)
     })
+}
+
+async function fetchAllChannelMessages (channel, limit) {
+    if (!limit) { limit = 12000; }//to prevent api spam and such, defaults to 12000
+    var sum_messages = [];
+    let last_id;
+    while (true) {
+        var options = { limit: 100 }
+        if (last_id) {
+            options.before = last_id;
+        }
+        var messages = await channel.messages.fetch(options);
+        sum_messages.push(...messages.array());
+        last_id = messages.last().id;
+
+        if (messages.size != options.limit || sum_messages.length >= limit) {
+            break;
+        }
+    }
+
+    return sum_messages;//returns an array;
+
 }
