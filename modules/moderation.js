@@ -1,29 +1,38 @@
+const { raw } = require('express');
 const config = require('../config.js');
 const datamanager = require('./datamanagement.js');
 
 //set/query the server mod role
 exports.setModRole = async (guild, roleMentions, member, args, bot) => {
-    var currentModRole = await guild.roles.cache.get(await datamanager.fetchData('modRoles', {guild: guild.id}).role);
-    if (!currentModRole) { currentModRole = `nope` };
-    if (!args[1]) return `This server's moderator role is \`${currentModRole.name}\``;
+    if (!args[1]) {
+        var currentModRoleData = await datamanager.fetchData('modRoles', { guild: guild.id });
+        var currentModRole;
+        if (!currentModRoleData[0]) {
+            currentModRole = { name: undefined }
+        } else {
+            currentModRole = await guild.roles.cache.get(currentModRoleData[0].role)
+        }
+        return `This server's moderator role is \`${currentModRole.name}\``;
+    }
     else if (!member.hasPermission('ADMINISTRATOR')) return 'You must have the `Administrator` permission to set the moderator role.';
     else if (roleMentions.size === 1) {
-        await datamanager.writeData('modRoles', {guild: guild.id, role: roleMentions.first().id}, {guild: guild.id})
+        await datamanager.writeData('modRoles', { guild: guild.id, role: roleMentions.first().id }, { guild: guild.id })
         return `Mod role set to \`${roleMentions.first().name}\``;
     }
     else if (guild.roles.cache.has(args[1])) {
-        await datamanager.writeData('modRoles', {guild: guild.id, role: args[1]}, {guild: guild.id})
+        await datamanager.writeData('modRoles', { guild: guild.id, role: args[1] }, { guild: guild.id })
         return `Mod role set to \`${guild.roles.cache.get(args[1]).name}\``;
     }
-    else if(args[1] === 'off') {
-        await datamanager.deleteData('modRoles', {guild: guild.id})
+    else if (args[1] === 'off') {
+        await datamanager.deleteData('modRoles', { guild: guild.id })
         return `This server no longer has a mod role`
     }
     else return `Command usage: ${config.prefix}modrole [role mention/id]`
 }
 
 exports.queryModRole = async (guild, member, bot) => {
-    var modRoleID = await datamanager.getValue(guild.id, config.modRoleStorageChannel, bot);
+    var modRoleData = await datamanager.fetchData('modRoles', { guild: guild.id });
+    var modRoleID = modRoleData[0] ? modRoleData[0].role : null;
     if (modRoleID === null) return false;
     if (await member.roles.cache.find(role => role.id === modRoleID)) return true;
     else return false;
@@ -34,11 +43,11 @@ exports.modLog = async (guild, channel, member, bot, args) => {
     if (!guild.me.hasPermission('VIEW_AUDIT_LOG')) return `I require the \`View Audit Log\` permission to execute this command.`;
     if (!member.hasPermission('ADMINISTRATOR')) return 'You must have the `Administrator` permission to set the modlog channel.';
     else if (args[1] === 'off') {
-        await datamanager.deleteEntry(guild.id, config.modLogChannelsStorageChannel, bot);
+        await datamanager.deleteData('modLog', { guild: guild.id })
         return `:white_check_mark: This server no longer has a modlog channel`;
     }
     else {
-        await datamanager.writeEntry(guild.id, channel.id, config.modLogChannelsStorageChannel, bot);
+        await datamanager.writeData('modLog', { guild: guild.id, channel: channel.id }, { guild: guild.id })
         return `:white_check_mark: This is the new modlog channel.`;
     }
 }
@@ -74,19 +83,21 @@ exports.extractTargetsAndReason = async (message) => {
 }
 
 exports.modLogEvent = async (bot, guild, type, user, moderator, reason) => {
-    var modlogChannel = bot.channels.cache.get(await datamanager.getValue(guild.id, config.modLogChannelsStorageChannel, bot));
+    var rawData = await datamanager.fetchData('modLog', { guild: guild.id });
+    var modlogChannelID = rawData[0] ? rawData[0].channel : false;
+    var modlogChannel = modlogChannelID ? bot.channels.cache.get(modlogChannelID) : false;
     if (!modlogChannel) return 0;
     else {
         modlogChannel.send('Placeholder Text').then(msg => {
             msg.edit(`**[${type}] ${user}**\nUser: ${user.tag}\nModerator: ${moderator.tag}\nReason: ${reason === 'Unspecified' ? `Responsible moderator, do \`${config.prefix}reason ${msg.id}\` to set` : reason}`);
-        }).catch(err => {})//in case the channel is deleted or something
+        }).catch(err => { })//in case the channel is deleted or something
     }
 }
 
 exports.setReason = async (guild, member, message, bot) => {
     var outputMessage = '';
     var modlogChannel = bot.channels.cache.get(await datamanager.getValue(guild.id, config.modLogChannelsStorageChannel, bot));
-    if(!modlogChannel) return message.channel.send(`This server doesn't have a modlog channel`);
+    if (!modlogChannel) return message.channel.send(`This server doesn't have a modlog channel`);
     var roleQuery = await exports.queryModRole(guild, member, bot);
     if (roleQuery === false && !(member.hasPermission('ADMINISTRATOR') || member.hasPermission('BAN_MEMBERS') || member.hasPermission('KICK_MEMBERS'))) return `Only moderators can execute this command.`;
     else {
@@ -208,15 +219,15 @@ exports.unban = async (guild, targets, member, reason, bot) => {
     else if (!guild.me.hasPermission('BAN_MEMBERS')) return `I require the \`Ban Members\` permission to execute this command.`;
     else if (targets.length > 10) return `You may only unban 10 users at a time.`;
     else if (reason.length > 500) return `The unban reason must not exceed 500 characters. Currently, it is ${reason.length}. You can set a longer reason afterwards with \`${config.prefix}reason\``;
-    for (let i = 0; i <targets.length; i++){
+    for (let i = 0; i < targets.length; i++) {
         await guild.fetchBans().then(async bans => {
-            if(bans.has(targets[i])) {
+            if (bans.has(targets[i])) {
                 await guild.members.unban(targets[i], `[${member.user.tag}] ${reason}`).then(unbanned => {
                     outputMessage += `Successfully unbanned \`${unbanned.tag}\`\n`;
                     exports.modLogEvent(bot, guild, `UNBAN`, unbanned, member.user, reason);
                 })
-                
-            }else{
+
+            } else {
                 outputMessage += `Unable to unban \`${targets[i]}\`: They don't seem to be banned.\n`
             }
         })

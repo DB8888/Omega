@@ -26,6 +26,10 @@ app.get('/', (req, res) => res.send("e"));
 
 app.listen(port, () => console.log(`web app listening at http://localhost:${port}`));
 
+//configure mongodb
+const mongo = require('./modules/mongo');
+mongo()
+
 //execute when the application has logged in
 bot.on('ready', () => {
     console.log('bot is online');
