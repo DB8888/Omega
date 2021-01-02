@@ -1,7 +1,7 @@
 require('dotenv').config()
 
 const mongoose = require('mongoose');
-const mongoPath = `mongodb+srv://Bot:${process.env.MONGODB_PASSWORD}@omega.o2k6t.mongodb.net/data?retryWrites=true&w=majority`;
+const mongoPath = `mongodb://Bot:${process.env.MONGODB_PASSWORD}@omega-shard-00-00.o2k6t.mongodb.net:27017,omega-shard-00-01.o2k6t.mongodb.net:27017,omega-shard-00-02.o2k6t.mongodb.net:27017/data?ssl=true&replicaSet=atlas-smozyd-shard-0&authSource=admin&retryWrites=true&w=majority`;
 
 const config = require('../config')
 
