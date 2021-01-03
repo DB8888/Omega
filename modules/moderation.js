@@ -110,7 +110,7 @@ exports.modLogEvent = async (bot, guild, type, user, moderator, reason) => {
                     .setColor(config.modLogEmbedColours[type])
                 msg.edit(edit)
             }
-        })
+        }).catch(err => {})//in case channel is deleted or unable to send for some reason
     }
 }
 
