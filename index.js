@@ -145,6 +145,8 @@ if (process.env.TEST != 1) {
 
         moderator = executor;
 
+        if (banLog.createdTimestamp < Date.now() - 5000) return 0;//ensure the last ban actually happened in the last 5 seconds
+
         if (target.id === user.id) {
             if (moderator === bot.user) return 0;
             moderation.modLogEvent(bot, guild, 'BAN', user, moderator, banLog.reason ? banLog.reason : 'Unspecified');
@@ -173,7 +175,7 @@ if (process.env.TEST != 1) {
         const { executor, target } = unbanLog;
 
         moderator = executor;
-
+        if (unbanLog.createdTimestamp < Date.now() - 5000) return 0;//ensure the last unban actually happened in the last 5 seconds
         if (target.id === user.id) {
             if (moderator === bot.user) return 0;
             moderation.modLogEvent(bot, guild, 'UNBAN', user, moderator, unbanLog.reason ? unbanLog.reason : 'Unspecified');
