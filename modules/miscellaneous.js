@@ -85,7 +85,7 @@ exports.clear = async (channel, member, amount) => {
     })
 }
 
-async function fetchAllChannelMessages (channel, limit) {
+async function fetchAllChannelMessages(channel, limit) {
     if (!limit) { limit = 12000; }//to prevent api spam and such, defaults to 12000
     var sum_messages = [];
     let last_id;
@@ -105,4 +105,14 @@ async function fetchAllChannelMessages (channel, limit) {
 
     return sum_messages;//returns an array;
 
+}
+
+exports.remind = async (args, user) => {
+    if (args.length < 3) return `Command usage: ${config.prefix}remind <time> <message>`
+    const ms = require('ms');
+    const timeToMs = require('./timetoms');
+    time = await timeToMs(args[1])
+    if (time === NaN) return `That doesn't look like a valid time`;
+    await dataManager.writeData('reminders', { user: user.id, reminder: args.slice(2).join(' '), time: Date.now() + time }, { user: user.id, reminder: args.slice(2).join(' '), time: Date.now() + time })
+    return `I'll remind you in ${args[1]}:\n\`${args.slice(2).join(' ')}\``;
 }

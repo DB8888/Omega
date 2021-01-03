@@ -1,3 +1,6 @@
+*Version 2.5.0*
+- Added a reminder command
+
 *Version 2.4.0*
 - Data storage migrated to MongoDB 
 - All modlog and modrole data has unfortunately been wiped
