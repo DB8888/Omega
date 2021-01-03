@@ -1,6 +1,6 @@
-const { raw } = require('express');
 const config = require('../config.js');
 const datamanager = require('./datamanagement.js');
+const Discord = require('discord.js')
 
 //set/query the server mod role
 exports.setModRole = async (guild, roleMentions, member, args, bot) => {
@@ -88,15 +88,37 @@ exports.modLogEvent = async (bot, guild, type, user, moderator, reason) => {
     var modlogChannel = modlogChannelID ? bot.channels.cache.get(modlogChannelID) : false;
     if (!modlogChannel) return 0;
     else {
-        modlogChannel.send('Placeholder Text').then(msg => {
-            msg.edit(`**[${type}] ${user}**\nUser: ${user.tag}\nModerator: ${moderator.tag}\nReason: ${reason === 'Unspecified' ? `Responsible moderator, do \`${config.prefix}reason ${msg.id}\` to set` : reason}`);
-        }).catch(err => { })//in case the channel is deleted or something
+        const log = new Discord.MessageEmbed()
+            .setTitle(type)
+            .setTimestamp()
+            .addFields(
+                { name: 'User', value: `${user.tag} (${user})`, inline: true },
+                { name: 'Moderator', value: `${moderator.tag} (${moderator})`, inline: true },
+                { name: 'Reason', value: reason }
+            )
+            .setColor(config.modLogEmbedColours[type])
+        modlogChannel.send(log).then(msg => {
+            if (reason === 'Unspecified') {
+                const edit = new Discord.MessageEmbed()
+                    .setTitle(type)
+                    .setTimestamp()
+                    .addFields(
+                        { name: 'User', value: `${user.tag} (${user})`, inline: true },
+                        { name: 'Moderator', value: `${moderator.tag} (${moderator})`, inline: true },
+                        { name: 'Reason', value: reason === 'Unspecified' ? `Responsible moderator, do \`${config.prefix}reason ${msg.id}\` to set` : reason }
+                    )
+                    .setColor(config.modLogEmbedColours[type])
+                msg.edit(edit)
+            }
+        })
     }
 }
 
 exports.setReason = async (guild, member, message, bot) => {
     var outputMessage = '';
-    var modlogChannel = bot.channels.cache.get(await datamanager.getValue(guild.id, config.modLogChannelsStorageChannel, bot));
+    var rawData = await datamanager.fetchData('modLog', { guild: guild.id });
+    var modlogChannelID = rawData[0] ? rawData[0].channel : false;
+    var modlogChannel = modlogChannelID ? bot.channels.cache.get(modlogChannelID) : false;
     if (!modlogChannel) return message.channel.send(`This server doesn't have a modlog channel`);
     var roleQuery = await exports.queryModRole(guild, member, bot);
     if (roleQuery === false && !(member.hasPermission('ADMINISTRATOR') || member.hasPermission('BAN_MEMBERS') || member.hasPermission('KICK_MEMBERS'))) return `Only moderators can execute this command.`;
@@ -105,22 +127,27 @@ exports.setReason = async (guild, member, message, bot) => {
 
         if (toChange.targets.length > 10) return `You may only set 10 reasons at once`;
         if (toChange.targets.length === 0 || toChange.reason === 'Unspecified') return `Command usage: ${config.prefix}reason <Modlog Message IDs> <reason>`;
-        if (toChange.reason.length > 1000) return `The reason must not exceed 1000 characters. Currently, it is ${toChange.reason.length}.`;
+        if (toChange.reason.length > 900) return `The reason must not exceed 900 characters. Currently, it is ${toChange.reason.length}.`;
 
         for (let i = 0; i < toChange.targets.length; i++) {
             await modlogChannel.messages.fetch(toChange.targets[i])
                 .then(async msg => {
-                    var contentSections = msg.content.split('\n');
-                    var withoutReason = `${contentSections[0]}\n${contentSections[1]}\n${contentSections[2]}\n`;
-
-                    await msg.edit(`${withoutReason}Reason: ${toChange.reason} (Set by ${member.user.tag})`).then(edit => {
-                        outputMessage += `Successfully updated reason for \`${edit.id}\`\n`;
-                    }).catch(err => {
-                        outputMessage += `Failed to updated reason for \`${toChange.targets[i]}\`: Unable to edit that message.\n`;
-                    })
+                    var embed = msg.embeds[0]
+                    if (!embed) {
+                        outputMessage += `Failed to update reason for \`${toChange.targets[i]}\`: That doesn't look like a valid modlog entry.\n`;
+                    } else {
+                        embed.fields[2].value = `${toChange.reason} - Set by ${member.user.tag} (${member.user})`;
+                        await msg.edit(embed)
+                            .then(() => {
+                                outputMessage += `Successfully updated reason for \`${toChange.targets[i]}\`\n`
+                            })
+                            .catch(err => {
+                                outputMessage += `Failed to update reason for \`${toChange.targets[i]}\`: Unable to edit the message.\n`;
+                            })
+                    }
                 })
                 .catch(err => {
-                    outputMessage += `Failed to updated reason for \`${toChange.targets[i]}\`: Unable to find that message.\n`;
+                    outputMessage += `Failed to update reason for \`${toChange.targets[i]}\`: Unable to find that message.\n`;
                 })
         }
 

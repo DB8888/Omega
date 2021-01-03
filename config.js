@@ -37,3 +37,9 @@ exports.botInviteLink = 'https://discord.com/oauth2/authorize?client_id=76086924
 exports.startupLoggingChannel = '777206414787477545';
 exports.commandLoggingChannel = '777567526217318430';
 exports.DMLoggingChannel = '787648931176775710';
+
+exports.modLogEmbedColours = {
+    BAN: '#FF0000',
+    KICK: '#FFFF00',
+    UNBAN: '#00FF00'
+}
