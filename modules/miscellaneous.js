@@ -112,7 +112,7 @@ exports.remind = async (args, user) => {
     const ms = require('ms');
     const timeToMs = require('./timetoms');
     time = await timeToMs(args[1])
-    if (time === NaN) return `That doesn't look like a valid time`;
+    if (!parseInt(time)) return `That doesn't look like a valid time`;
     await dataManager.writeData('reminders', { user: user.id, reminder: args.slice(2).join(' '), time: Date.now() + time }, { user: user.id, reminder: args.slice(2).join(' '), time: Date.now() + time })
     return `I'll remind you in ${args[1]}:\n\`${args.slice(2).join(' ')}\``;
 }
