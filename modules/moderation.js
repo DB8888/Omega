@@ -93,7 +93,7 @@ exports.modLogEvent = async (bot, guild, type, user, moderator, reason) => {
             .setTimestamp()
             .addFields(
                 { name: 'User', value: `${user.tag} (${user})`, inline: true },
-                { name: 'Moderator', value: `${moderator.tag} (${moderator})`, inline: true },
+                { name: 'Moderator', value: `${moderator.tag} (${moderator.tag === 'Unknown' ? '?' : moderator})`, inline: true },
                 { name: 'Reason', value: reason }
             )
             .setColor(config.modLogEmbedColours[type])
