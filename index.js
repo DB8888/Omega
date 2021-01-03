@@ -127,7 +127,7 @@ bot.on('message', async message => {
         console.log(err);
     }
 })
-if (process.env.TEST != 1) {
+//if (process.env.TEST != 1) {
     bot.on('guildBanAdd', async (guild, user) => {//execute when someone is banned, to catch bans not made by the bot
         var moderator;
         const fetchedLogs = await guild.fetchAuditLogs({
@@ -186,22 +186,20 @@ if (process.env.TEST != 1) {
             limit: 1,
             type: 'MEMBER_KICK',
         });
-
         const kickLog = fetchedLogs.entries.first();
-
 
         if (!kickLog) return 0;
 
         const { executor, target } = kickLog;
 
 
-        if (target.id === user.id && kickLog.createdTimestamp > Date.now() - 5000) {
+        if (target.id === member.user.id && kickLog.createdTimestamp > Date.now() - 5000) {
             if (executor === bot.user) return 0;
             let user = member.user;
             moderation.modLogEvent(bot, member.guild, 'KICK', user, executor, kickLog.reason ? kickLog.reason : 'Unspecified');
         }
     });
-}
+//}
     async function log(server, command, user, channel) {
         bot.channels.cache.get(config.commandLoggingChannel).send(`\`\`\`\n${user.tag}, ${channel}, ${server.name}: ${command}\`\`\``)
     }
