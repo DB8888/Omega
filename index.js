@@ -145,9 +145,7 @@ if (process.env.TEST != 1) {
 
         moderator = executor;
 
-        if (banLog.createdTimestamp < Date.now() - 5000) return 0;//ensure the last ban actually happened in the last 5 seconds
-
-        if (target.id === user.id) {
+        if (target.id === user.id && banLog.createdTimestamp < Date.now() - 5000) {
             if (moderator === bot.user) return 0;
             moderation.modLogEvent(bot, guild, 'BAN', user, moderator, banLog.reason ? banLog.reason : 'Unspecified');
         } else {
@@ -175,8 +173,7 @@ if (process.env.TEST != 1) {
         const { executor, target } = unbanLog;
 
         moderator = executor;
-        if (unbanLog.createdTimestamp < Date.now() - 5000) return 0;//ensure the last unban actually happened in the last 5 seconds
-        if (target.id === user.id) {
+        if (target.id === user.id && unbanLog.createdTimestamp < Date.now() - 5000) {
             if (moderator === bot.user) return 0;
             moderation.modLogEvent(bot, guild, 'UNBAN', user, moderator, unbanLog.reason ? unbanLog.reason : 'Unspecified');
         } else {
@@ -194,13 +191,11 @@ if (process.env.TEST != 1) {
 
 
         if (!kickLog) return 0;
-        if (kickLog.createdTimestamp < Date.now() - 5000) return 0;//ensure the last kick actually happened in the last 5 seconds
-
 
         const { executor, target } = kickLog;
 
 
-        if (target.id === member.id) {
+        if (target.id === user.id && kickLog.createdTimestamp < Date.now() - 5000) {
             if (executor === bot.user) return 0;
             let user = member.user;
             moderation.modLogEvent(bot, member.guild, 'KICK', user, executor, kickLog.reason ? kickLog.reason : 'Unspecified');
