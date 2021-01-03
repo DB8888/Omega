@@ -104,13 +104,13 @@ exports.modLogEvent = async (bot, guild, type, user, moderator, reason) => {
                     .setTimestamp()
                     .addFields(
                         { name: 'User', value: `${user.tag} (${user})`, inline: true },
-                        { name: 'Moderator', value: `${moderator.tag} (${moderator})`, inline: true },
+                        { name: 'Moderator', value: `${moderator.tag} (${moderator.tag === 'Unknown' ? '?' : moderator})`, inline: true },
                         { name: 'Reason', value: reason === 'Unspecified' ? `Responsible moderator, do \`${config.prefix}reason ${msg.id}\` to set` : reason }
                     )
                     .setColor(config.modLogEmbedColours[type])
                 msg.edit(edit)
             }
-        }).catch(err => {})//in case channel is deleted or unable to send for some reason
+        }).catch(err => { })//in case channel is deleted or unable to send for some reason
     }
 }
 
