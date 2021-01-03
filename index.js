@@ -145,7 +145,7 @@ if (process.env.TEST != 1) {
 
         moderator = executor;
 
-        if (target.id === user.id && banLog.createdTimestamp < Date.now() - 5000) {
+        if (target.id === user.id && banLog.createdTimestamp > Date.now() - 5000) {
             if (moderator === bot.user) return 0;
             moderation.modLogEvent(bot, guild, 'BAN', user, moderator, banLog.reason ? banLog.reason : 'Unspecified');
         } else {
@@ -173,7 +173,7 @@ if (process.env.TEST != 1) {
         const { executor, target } = unbanLog;
 
         moderator = executor;
-        if (target.id === user.id && unbanLog.createdTimestamp < Date.now() - 5000) {
+        if (target.id === user.id && unbanLog.createdTimestamp > Date.now() - 5000) {
             if (moderator === bot.user) return 0;
             moderation.modLogEvent(bot, guild, 'UNBAN', user, moderator, unbanLog.reason ? unbanLog.reason : 'Unspecified');
         } else {
@@ -195,7 +195,7 @@ if (process.env.TEST != 1) {
         const { executor, target } = kickLog;
 
 
-        if (target.id === user.id && kickLog.createdTimestamp < Date.now() - 5000) {
+        if (target.id === user.id && kickLog.createdTimestamp > Date.now() - 5000) {
             if (executor === bot.user) return 0;
             let user = member.user;
             moderation.modLogEvent(bot, member.guild, 'KICK', user, executor, kickLog.reason ? kickLog.reason : 'Unspecified');
