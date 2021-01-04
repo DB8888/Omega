@@ -54,8 +54,11 @@ bot.on('message', async message => {
         var muteRole = await dataManager.fetchData('muteRoles', { guild: message.guild.id });
         if (muteRole[0]) {
             muteRole = muteRole[0].role;
-            message.member.roles.add(muteRole, "Tried to speak while muted").catch(err => { })
-            message.delete({ reason: "Tried to speak while muted" }).catch(err => { })
+            if (!member.roles.cache.has(muteRole)) {
+                message.member.roles.add(muteRole, "Tried to speak while muted").catch(err => { })
+                message.delete({ reason: "Tried to speak while muted" }).catch(err => { })
+            }
+
         }
     }
 
