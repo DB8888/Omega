@@ -17,6 +17,7 @@ const supportServer = require('./modules/supportserverprocesses.js');
 const errorHandler = require('./modules/errorhandling.js');
 const moderation = require('./modules/moderation.js');
 const ownercommands = require('./modules/ownercommands.js');
+const dataManager = require('./modules/datamanagement')
 
 //configure a web app, so that the repl can be kept alive
 const express = require('express');
@@ -47,6 +48,18 @@ bot.on('message', async message => {
         bot.channels.cache.get(config.DMLoggingChannel).send(`${message.author}: ${message.content}`);
     }
     if (message.author.bot) return 0;
+    //check if member should be muted
+    var mutes = await dataManager.fetchData('mutes', { user: message.author.id, guild: message.guild.id })
+    if (mutes[0]) {
+        var muteRole = await dataManager.fetchData('muteRoles', { guild: message.guild.id });
+        if (muteRole[0]) {
+            muteRole = muteRole[0].role;
+            message.member.roles.add(muteRole, "Tried to speak while muted").catch(err => { })
+            message.delete({ reason: "Tried to speak while muted" }).catch(err => { })
+        }
+    }
+
+
     //command handler
     if (!message.content.startsWith(config.prefix)) return 0;
     let args = message.content.substring(config.prefix.length).split(' ');
@@ -120,6 +133,21 @@ bot.on('message', async message => {
             case 'remind':
                 message.channel.send(await misc.remind(args, message.author));
                 break;
+            case 'tempban':
+                var tempban = await moderation.extractTargetsAndReason(message)
+                message.channel.send(await moderation.tempban(message.guild, tempban.targets, message.member, tempban.reason, bot));
+                break;
+            case 'muterole':
+                message.channel.send(await moderation.setMuteRole(message.guild, message.mentions.roles, message.member, args, bot))
+                break;
+            case 'mute':
+                var mute = await moderation.extractTargetsAndReason(message)
+                message.channel.send(await moderation.mute(message.guild, mute.targets, message.member, mute.reason, bot));
+                break;
+            case 'unmute':
+                var unmute = await moderation.extractTargetsAndReason(message)
+                message.channel.send(await moderation.unmute(message.guild, unmute.targets, message.member, unmute.reason, bot));
+                break;
         }
         log(message.guild, message.content, message.author, message.channel)
     } catch (err) {
@@ -127,7 +155,7 @@ bot.on('message', async message => {
         console.log(err);
     }
 })
-//if (process.env.TEST != 1) {
+if (process.env.TEST != 1) {
     bot.on('guildBanAdd', async (guild, user) => {//execute when someone is banned, to catch bans not made by the bot
         var moderator;
         const fetchedLogs = await guild.fetchAuditLogs({
@@ -158,6 +186,7 @@ bot.on('message', async message => {
     })
 
     bot.on('guildBanRemove', async (guild, user) => {//execute when someone is unbanned, to catch bans not made by the bot
+        moderation.deregisterTempBan(guild, user)
         var moderator;
         const fetchedLogs = await guild.fetchAuditLogs({
             limit: 1,
@@ -199,7 +228,16 @@ bot.on('message', async message => {
             moderation.modLogEvent(bot, member.guild, 'KICK', user, executor, kickLog.reason ? kickLog.reason : 'Unspecified');
         }
     });
-//}
-    async function log(server, command, user, channel) {
-        bot.channels.cache.get(config.commandLoggingChannel).send(`\`\`\`\n${user.tag}, ${channel}, ${server.name}: ${command}\`\`\``)
-    }
+}
+async function log(server, command, user, channel) {
+    bot.channels.cache.get(config.commandLoggingChannel).send(`\`\`\`\n${user.tag}, ${channel}, ${server.name}: ${command}\`\`\``)
+}
+
+bot.on('guildMemberAdd', async member => {//muterole persist
+    var mutes = await dataManager.fetchData('mutes', { user: member.user.id, guild: member.guild.id })
+    if (!mutes[0]) return;
+    var muteRole = await dataManager.fetchData('muteRoles', { guild: member.guild.id });
+    if (!muteRole[0]) return;
+    muteRole = muteRole[0].role;
+    member.roles.add(muteRole, "Role persist").catch(err => { })
+})

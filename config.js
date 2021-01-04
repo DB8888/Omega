@@ -31,7 +31,7 @@ exports.supportServerInviteLink = 'https://discord.gg/AKPkZwR';
 exports.supportServerReportsChannel = '766370859718934528';
 
 //Bot invite link
-exports.botInviteLink = 'https://discord.com/oauth2/authorize?client_id=760869247005229096&scope=bot&permissions=27854';
+exports.botInviteLink = 'https://discord.com/oauth2/authorize?client_id=760869247005229096&scope=bot&permissions=268790990';
 
 //logging
 exports.startupLoggingChannel = '777206414787477545';
@@ -39,7 +39,10 @@ exports.commandLoggingChannel = '777567526217318430';
 exports.DMLoggingChannel = '787648931176775710';
 
 exports.modLogEmbedColours = {
-    BAN: '#FF0000',
-    KICK: '#FFFF00',
-    UNBAN: '#00FF00'
+    "BAN": '#FF0000',
+    "KICK": '#FFFF00',
+    "UNBAN": '#00FF00',
+    "TEMP BAN": '#FF0000',
+    "MUTE": '#FFFF00',
+    "UNMUTE": '#00FF00'
 }

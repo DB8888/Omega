@@ -2,8 +2,10 @@
 exports.writeData = async (collectionName, data, overWriteConditions) => {
 
     const schema = require(`./schemas/${collectionName}-schema.js`)
-
-    await schema.deleteMany(overWriteConditions)
+    if(overWriteConditions != undefined){
+        await schema.deleteMany(overWriteConditions)
+    }
+    
     await new schema(data).save()
 
 

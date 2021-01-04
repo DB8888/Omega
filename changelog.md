@@ -1,5 +1,7 @@
-*Version 2.6.0*
-- Modlog entries are now rich embeds
+*Version 3.0.0*
+- Modlog messages are now rich embeds
+- Introduced a tempban command
+- Introduced a mute (and tempmute) command
 
 *Version 2.5.0*
 - Added a reminder command
