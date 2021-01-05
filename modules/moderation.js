@@ -171,7 +171,7 @@ exports.kick = async (guild, targets, member, reason, bot) => {
         if (targetMember) {
             if (targetMember.kickable) {
                 let targetMemberModRole = await exports.queryModRole(guild, targetMember, bot);
-                if ((targetMemberModRole || targetMember.hasPermission('ADMINISTRATOR') || targetMember.hasPermission('KICK_MEMBERS') || targetMember.hasPermission('BAN_MEMBERS'))) {
+                if ((targetMemberModRole || targetMember.hasPermission('ADMINISTRATOR') || targetMember.hasPermission('KICK_MEMBERS') || targetMember.hasPermission('BAN_MEMBERS')) && !member.hasPermission('ADMINISTRATOR')) {
                     outputMessage += `Unable to kick \`${targetMember.user.tag}\`: Only administrators can kick people with the moderator role and/or moderator permissions.\n`
                 } else {
                     await targetMember.user.send(`You were kicked from ${targetMember.guild.name} by ${member.user.tag}.\nReason: \`${reason}\``).catch(err => { });
@@ -208,7 +208,7 @@ exports.ban = async (guild, targets, member, reason, bot) => {
                 if (targetMember) {
                     if (targetMember.bannable) {
                         let targetMemberModRole = await exports.queryModRole(guild, targetMember, bot);
-                        if ((targetMemberModRole || targetMember.hasPermission('ADMINISTRATOR') || targetMember.hasPermission('KICK_MEMBERS') || targetMember.hasPermission('BAN_MEMBERS'))) {
+                        if ((targetMemberModRole || targetMember.hasPermission('ADMINISTRATOR') || targetMember.hasPermission('KICK_MEMBERS') || targetMember.hasPermission('BAN_MEMBERS')) && !member.hasPermission('ADMINISTRATOR')) {
                             outputMessage += `Unable to ban \`${targetMember.user.tag}\`: Only administrators can ban people with the moderator role and/or moderator permissions.\n`
                         } else {
                             await targetMember.user.send(`You were banned from ${targetMember.guild.name} by ${member.user.tag}.\nReason: \`${reason}\``).catch(err => { });
@@ -293,7 +293,7 @@ exports.tempban = async (guild, targets, member, reason, bot) => {
                 if (targetMember) {
                     if (targetMember.bannable) {
                         let targetMemberModRole = await exports.queryModRole(guild, targetMember, bot);
-                        if ((targetMemberModRole || targetMember.hasPermission('ADMINISTRATOR') || targetMember.hasPermission('KICK_MEMBERS') || targetMember.hasPermission('BAN_MEMBERS'))) {
+                        if ((targetMemberModRole || targetMember.hasPermission('ADMINISTRATOR') || targetMember.hasPermission('KICK_MEMBERS') || targetMember.hasPermission('BAN_MEMBERS')) && !member.hasPermission('ADMINISTRATOR')) {
                             outputMessage += `Unable to tempban \`${targetMember.user.tag}\`: Only administrators can ban people with the moderator role and/or moderator permissions.\n`
                         } else {
                             await targetMember.user.send(`You were temporarily banned from ${targetMember.guild.name} for ${time} by ${member.user.tag}.\nReason: \`${reason.split(' ').slice(1).join(' ')}\``).catch(err => { });
