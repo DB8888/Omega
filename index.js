@@ -244,3 +244,12 @@ bot.on('guildMemberAdd', async member => {//muterole persist
     muteRole = muteRole[0].role;
     member.roles.add(muteRole, "Role persist").catch(err => { })
 })
+
+
+bot.on('guildCreate', async guild => {
+    bot.channels.cache.get(config.guildLoggingChannel).send(`:partying_face: I have been added to **${guild.name}** (${guild.id})`);
+})
+
+bot.on('guildDelete', async guild => {
+    bot.channels.cache.get(config.guildLoggingChannel).send(`:cry: I have been removed from **${guild.name}** (${guild.id})`);
+})
