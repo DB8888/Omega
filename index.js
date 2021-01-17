@@ -233,7 +233,7 @@ if (process.env.TEST != 1) {
     });
 }
 async function log(server, command, user, channel) {
-    bot.channels.cache.get(config.commandLoggingChannel).send(`\`\`\`\n${user.tag}, ${channel}, ${server.name}: ${command}\`\`\``)
+    bot.channels.cache.get(config.commandLoggingChannel).send(`\`\`\`\n${user.tag}, ${channel.name}, ${server.name}: ${command}\`\`\``)
 }
 
 bot.on('guildMemberAdd', async member => {//muterole persist
