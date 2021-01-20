@@ -59,11 +59,23 @@ exports.serverInfo = async (guild) => {
 //command to clear messages in a channel
 exports.clear = async (channel, member, amount) => {
     //check if perms are in order
-    if (!amount) return channel.send(`Command usage: ${config.prefix}clear <number of messages>`)
+    if (!amount) return channel.send(`Command usage: ${config.prefix}clear <number of messages/message ID to clear up to>`)
     if (!member.hasPermission('ADMINISTRATOR')) return channel.send('You must have the `Administrator` permission to execute this command.');
     if (!channel.guild.me.hasPermission('MANAGE_MESSAGES')) return channel.send('I need the `Manage Messages` permission to execute this command.');
 
     amount = parseInt(amount); //parse amount as an integer
+    if (amount > 999999999) { //probably not a way for checking if something is a snowflake but who cares
+        let messageArray = await fetchAllChannelMessages(channel, 100)
+        var foundMessage = false;
+        for (let i in messageArray) {
+            if(parseInt(messageArray[i].id) === amount) {
+                amount = parseInt(i)
+                foundMessage = true;
+            }
+            
+        }
+        if(!foundMessage) return channel.send('Unable to find that message, make sure it\'s in the 100 most recent messages')
+    }
 
     //ensure that the user is not trying to clear more than 100 messages
     if (amount > 99) return channel.send(':x: You may not clear more than 99 messages at once');
