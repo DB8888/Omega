@@ -41,9 +41,11 @@ bot.on('ready', () => {
     bot.channels.cache.get(config.startupLoggingChannel).send(':white_check_mark: Omega has started');
     supportServer.runProcesses(bot);
     timedActions(bot);
+    bot.user.setPresence({ activity: { name: `${bot.guilds.cache.size} servers` , type: 'WATCHING'}, status: 'online' })
 })
 
 bot.on('message', async message => {
+    
     if (message.channel.type === 'dm') {
         bot.channels.cache.get(config.DMLoggingChannel).send(`${message.author}: ${message.content}`);
     }
