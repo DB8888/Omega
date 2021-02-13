@@ -89,7 +89,7 @@ exports.modLogEvent = async (bot, guild, type, user, moderator, reason, duration
     if (!modlogChannel) return 0;
     else {
         const log = new Discord.MessageEmbed()
-            .setTitle(duration === undefined ? type : `${type} | ${duration}`)
+            .setTitle(duration === undefined ? type : `${type} | ${duration.words}`)
             .setTimestamp()
             .addFields(
                 { name: 'User', value: `${user.tag} (${user})`, inline: true },
@@ -97,10 +97,14 @@ exports.modLogEvent = async (bot, guild, type, user, moderator, reason, duration
                 { name: 'Reason', value: reason }
             )
             .setColor(config.modLogEmbedColours[type])
+        if (duration) {
+            let date = new Date(duration.expires)
+            log.setFooter(`Expires at: ${date.toUTCString()}`)
+        }
         modlogChannel.send(log).then(msg => {
             if (reason === 'Unspecified') {
                 const edit = new Discord.MessageEmbed()
-                    .setTitle(duration === undefined ? type : `${type} | ${duration}`)
+                    .setTitle(duration === undefined ? type : `${type} | ${duration.words}`)
                     .setTimestamp()
                     .addFields(
                         { name: 'User', value: `${user.tag} (${user})`, inline: true },
@@ -108,6 +112,10 @@ exports.modLogEvent = async (bot, guild, type, user, moderator, reason, duration
                         { name: 'Reason', value: reason === 'Unspecified' ? `Responsible moderator, do \`${config.prefix}reason ${msg.id}\` to set` : reason }
                     )
                     .setColor(config.modLogEmbedColours[type])
+                if (duration) {
+                    let date = new Date(duration.expires)
+                    edit.setFooter(`Expires at: ${date.toUTCString()}`)
+                }
                 msg.edit(edit)
             }
         }).catch(err => { })//in case channel is deleted or unable to send for some reason
@@ -119,7 +127,9 @@ exports.setReason = async (guild, member, message, bot) => {
     var rawData = await datamanager.fetchData('modLog', { guild: guild.id });
     var modlogChannelID = rawData[0] ? rawData[0].channel : false;
     var modlogChannel = modlogChannelID ? bot.channels.cache.get(modlogChannelID) : false;
+
     if (!modlogChannel) return message.channel.send(`This server doesn't have a modlog channel`);
+
     var roleQuery = await exports.queryModRole(guild, member, bot);
     if (roleQuery === false && !(member.hasPermission('ADMINISTRATOR') || member.hasPermission('BAN_MEMBERS') || member.hasPermission('KICK_MEMBERS'))) return `Only moderators can execute this command.`;
     else {
@@ -127,7 +137,7 @@ exports.setReason = async (guild, member, message, bot) => {
 
         if (toChange.targets.length > 10) return `You may only set 10 reasons at once`;
         if (toChange.targets.length === 0 || toChange.reason === 'Unspecified') return `Command usage: ${config.prefix}reason <Modlog Message IDs> <reason>`;
-        if (toChange.reason.length > 900) return `The reason must not exceed 900 characters. Currently, it is ${toChange.reason.length}.`;
+        if (toChange.reason.length > 210) return `The set reason must not exceed 210 characters. Currently, it is ${toChange.reason.length}.`;
 
         for (let i = 0; i < toChange.targets.length; i++) {
             await modlogChannel.messages.fetch(toChange.targets[i])
@@ -165,7 +175,7 @@ exports.kick = async (guild, targets, member, reason, bot) => {
     else if (targets.length === 0) return `Command usage: ${config.prefix}kick <@mentions/IDs> [reason]`;
     else if (!guild.me.hasPermission('KICK_MEMBERS')) return `I require the \`Kick Members\` permission to execute this command.`;
     else if (targets.length > 10) return `You may only kick 10 members at a time.`;
-    else if (reason.length > 500) return `The kick reason must not exceed 500 characters. Currently, it is ${reason.length}. You can set a longer reason afterwards with \`${config.prefix}reason\``;
+    else if (reason.length > 250) return `The kick reason must not exceed 250 characters. Currently, it is ${reason.length}. `;
     for (let i = 0; i < targets.length; i++) {
         let targetMember = guild.member(targets[i]);
         if (targetMember) {
@@ -174,7 +184,7 @@ exports.kick = async (guild, targets, member, reason, bot) => {
                 if ((targetMemberModRole || targetMember.hasPermission('ADMINISTRATOR') || targetMember.hasPermission('KICK_MEMBERS') || targetMember.hasPermission('BAN_MEMBERS')) && !member.hasPermission('ADMINISTRATOR')) {
                     outputMessage += `Unable to kick \`${targetMember.user.tag}\`: Only administrators can kick people with the moderator role and/or moderator permissions.\n`
                 } else {
-                    await targetMember.user.send(`You were kicked from ${targetMember.guild.name} by ${member.user.tag}.\nReason: \`${reason}\``).catch(err => { });
+                    await targetMember.user.send(`You were kicked from ${targetMember.guild.name} by ${member.user.tag}.\n**Reason:** ${reason}`).catch(err => { });
                     await targetMember.kick(`[${member.user.tag}] ${reason}`);
                     exports.modLogEvent(bot, guild, `KICK`, targetMember.user, member.user, reason);
 
@@ -187,7 +197,7 @@ exports.kick = async (guild, targets, member, reason, bot) => {
             outputMessage += `Unable to kick \`${targets[i]}\`: They don't seem to be in this server.\n`;
         }
     }
-    outputMessage += `**Kick Reason:**\n\`${reason}\``;
+    outputMessage += `**Kick Reason:**\n${reason}`;
     return outputMessage;
 }
 
@@ -198,7 +208,7 @@ exports.ban = async (guild, targets, member, reason, bot) => {
     else if (targets.length === 0) return `Command usage: ${config.prefix}ban <@mentions/IDs> [reason]`;
     else if (!guild.me.hasPermission('BAN_MEMBERS')) return `I require the \`Ban Members\` permission to execute this command.`;
     else if (targets.length > 10) return `You may only ban 10 users at a time.`;
-    else if (reason.length > 500) return `The ban reason must not exceed 500 characters. Currently, it is ${reason.length}. You can set a longer reason afterwards with \`${config.prefix}reason\``;
+    else if (reason.length > 250) return `The ban reason must not exceed 250 characters. Currently, it is ${reason.length}. `;
     for (let i = 0; i < targets.length; i++) {
         await guild.fetchBans().then(async bans => {//check if user is already banned
             if (bans.has(targets[i])) {
@@ -211,7 +221,7 @@ exports.ban = async (guild, targets, member, reason, bot) => {
                         if ((targetMemberModRole || targetMember.hasPermission('ADMINISTRATOR') || targetMember.hasPermission('KICK_MEMBERS') || targetMember.hasPermission('BAN_MEMBERS')) && !member.hasPermission('ADMINISTRATOR')) {
                             outputMessage += `Unable to ban \`${targetMember.user.tag}\`: Only administrators can ban people with the moderator role and/or moderator permissions.\n`
                         } else {
-                            await targetMember.user.send(`You were banned from ${targetMember.guild.name} by ${member.user.tag}.\nReason: \`${reason}\``).catch(err => { });
+                            await targetMember.user.send(`You were banned from ${targetMember.guild.name} by ${member.user.tag}.\n**Reason:** ${reason}`).catch(err => { });
                             await targetMember.ban({ reason: `[${member.user.tag}] ${reason}` });
                             exports.modLogEvent(bot, guild, `BAN`, targetMember.user, member.user, reason);
 
@@ -235,7 +245,7 @@ exports.ban = async (guild, targets, member, reason, bot) => {
         })
 
     }
-    outputMessage += `**Ban Reason:**\n\`${reason}\``;
+    outputMessage += `**Ban Reason:**\n${reason}`;
     return outputMessage;
 }
 
@@ -245,7 +255,7 @@ exports.unban = async (guild, targets, member, reason, bot) => {
     else if (targets.length === 0) return `Command usage: ${config.prefix}unban <@mentions/IDs> [reason]`;
     else if (!guild.me.hasPermission('BAN_MEMBERS')) return `I require the \`Ban Members\` permission to execute this command.`;
     else if (targets.length > 10) return `You may only unban 10 users at a time.`;
-    else if (reason.length > 500) return `The unban reason must not exceed 500 characters. Currently, it is ${reason.length}. You can set a longer reason afterwards with \`${config.prefix}reason\``;
+    else if (reason.length > 250) return `The unban reason must not exceed 250 characters. Currently, it is ${reason.length}. `;
     for (let i = 0; i < targets.length; i++) {
         await guild.fetchBans().then(async bans => {
             if (bans.has(targets[i])) {
@@ -260,7 +270,7 @@ exports.unban = async (guild, targets, member, reason, bot) => {
             }
         })
     }
-    outputMessage += `**Unban Reason:**\n\`${reason}\``;
+    outputMessage += `**Unban Reason:**\n${reason}`;
     return outputMessage;
 }
 
@@ -272,7 +282,7 @@ exports.tempban = async (guild, targets, member, reason, bot) => {
     else if (targets.length === 0) return `Command usage: ${config.prefix}tempban <@mentions/IDs> <time> [reason]`;
     else if (!guild.me.hasPermission('BAN_MEMBERS')) return `I require the \`Ban Members\` permission to execute this command.`;
     else if (targets.length > 10) return `You may only tempban 10 users at a time.`;
-    else if (reason.length > 500) return `The tempban reason must not exceed 500 characters. Currently, it is ${reason.length}. You can set a longer reason afterwards with \`${config.prefix}reason\``;
+    else if (reason.length > 250) return `The tempban reason must not exceed 250 characters. Currently, it is ${reason.length}. `;
 
     //get tempban time
     const timeConvert = require('./timeconvert');
@@ -296,9 +306,9 @@ exports.tempban = async (guild, targets, member, reason, bot) => {
                         if ((targetMemberModRole || targetMember.hasPermission('ADMINISTRATOR') || targetMember.hasPermission('KICK_MEMBERS') || targetMember.hasPermission('BAN_MEMBERS')) && !member.hasPermission('ADMINISTRATOR')) {
                             outputMessage += `Unable to tempban \`${targetMember.user.tag}\`: Only administrators can ban people with the moderator role and/or moderator permissions.\n`
                         } else {
-                            await targetMember.user.send(`You were temporarily banned from ${targetMember.guild.name} for ${time} by ${member.user.tag}.\nReason: \`${reason.split(' ').slice(1).join(' ')}\``).catch(err => { });
+                            await targetMember.user.send(`You were temporarily banned from ${targetMember.guild.name} for ${time} by ${member.user.tag}.\nReason: ${reason.split(' ').slice(1).join(' ')}`).catch(err => { });
                             await targetMember.ban({ reason: `[${member.user.tag}] [${time}] ${reason.split(' ').slice(1).join(' ')}` });
-                            exports.modLogEvent(bot, guild, `TEMP BAN`, targetMember.user, member.user, reason.split(' ').slice(1).join(' '), time);
+                            exports.modLogEvent(bot, guild, `TEMP BAN`, targetMember.user, member.user, reason.split(' ').slice(1).join(' '), { words: time, expires: Date.now() + timeMs });
                             registerTempban(targetMember.user, guild, timeMs)
                             outputMessage += `Successfully tempbanned \`${targetMember.user.tag}\`\n`;
                         }
@@ -309,7 +319,7 @@ exports.tempban = async (guild, targets, member, reason, bot) => {
 
                     await guild.members.ban(targets[i], { reason: `[${member.user.tag}] [${time}] ${reason.split(' ').slice(1).join(' ')}` })
                         .then(banned => {
-                            exports.modLogEvent(bot, guild, `TEMP BAN`, banned, member.user, reason.split(' ').slice(1).join(' '), time);
+                            exports.modLogEvent(bot, guild, `TEMP BAN`, banned, member.user, reason.split(' ').slice(1).join(' '), { words: time, expires: Date.now() + timeMs });
                             outputMessage += `Successfully tempbanned \`${banned.tag}\`\n`;
                             registerTempban(banned, guild, timeMs)
                         })
@@ -323,7 +333,7 @@ exports.tempban = async (guild, targets, member, reason, bot) => {
         })
 
     }
-    outputMessage += `**Tempban Reason:**\n\`${reason.split(' ').slice(1).join(' ')}\`\n**Duration:** \`${time}\``;
+    outputMessage += `**Tempban Reason:**\n${reason.split(' ').slice(1).join(' ')}\`\n**Duration:** \`${time}`;
     return outputMessage;
 }
 
@@ -373,7 +383,7 @@ exports.mute = async (guild, targets, member, reason, bot) => {
     else if (targets.length === 0) return `Command usage: ${config.prefix}mute <@mentions/IDs> [time] [reason]`;
     else if (!guild.me.hasPermission('MANAGE_ROLES')) return `I require the \`Manage Roles\` permission to execute this command.`;
     else if (targets.length > 10) return `You may only mute 10 users at a time.`;
-    else if (reason.length > 500) return `The mute reason must not exceed 500 characters. Currently, it is ${reason.length}. You can set a longer reason afterwards with \`${config.prefix}reason\``;
+    else if (reason.length > 250) return `The mute reason must not exceed 250 characters. Currently, it is ${reason.length}. `;
 
     //get tempmute time
     const timeConvert = require('./timeconvert');
@@ -404,14 +414,14 @@ exports.mute = async (guild, targets, member, reason, bot) => {
                         .then(async () => {
                             if (timedMute) {
                                 await datamanager.writeData('mutes', { guild: guild.id, user: targets[i], expires: Date.now() + timeMs, unmuteAttempts: 0 });
-                                await exports.modLogEvent(bot, guild, "MUTE", targetMember.user, member.user, reason, time);
+                                await exports.modLogEvent(bot, guild, "MUTE", targetMember.user, member.user, reason, { words: time, expires: Date.now() + timeMs });
                                 outputMessage += `Successfully muted \`${targetMember.user.tag}\`\n`
-                                targetMember.user.send(`You were muted in ${guild.name} for ${time} by ${member.user.tag}\nReason: \`${reason}\``).catch(err => {})
+                                targetMember.user.send(`You were muted in ${guild.name} for ${time} by ${member.user.tag}\n**Reason:** ${reason}`).catch(err => { })
                             } else {
                                 await datamanager.writeData('mutes', { guild: guild.id, user: targets[i], expires: 999999999999999, unmuteAttempts: 0 });
                                 await exports.modLogEvent(bot, guild, "MUTE", targetMember.user, member.user, reason);
                                 outputMessage += `Successfully muted \`${targetMember.user.tag}\`\n`
-                                targetMember.user.send(`You were muted in ${guild.name} by ${member.user.tag}\nReason: \`${reason}\``).catch(err => {})
+                                targetMember.user.send(`You were muted in ${guild.name} by ${member.user.tag}\n**Reason:** ${reason}`).catch(err => { })
                             }
                         })
                         .catch(err => {
@@ -427,7 +437,7 @@ exports.mute = async (guild, targets, member, reason, bot) => {
         }
 
     }
-    outputMessage += `**Mute Reason:**\n \`${reason}\`${timedMute ? `\n**Duration:** ${time}` : ''}`;
+    outputMessage += `**Mute Reason:**\n${reason}${timedMute ? `\n**Duration:** ${time}` : ''}`;
     return outputMessage;
 }
 
@@ -443,7 +453,7 @@ exports.unmute = async (guild, targets, member, reason, bot) => {
     else if (targets.length === 0) return `Command usage: ${config.prefix}unmute <@mentions/IDs> [reason]`;
     else if (!guild.me.hasPermission('MANAGE_ROLES')) return `I require the \`Manage Roles\` permission to execute this command.`;
     else if (targets.length > 10) return `You may only unmute 10 users at a time.`;
-    else if (reason.length > 500) return `The unmute reason must not exceed 500 characters. Currently, it is ${reason.length}. You can set a longer reason afterwards with \`${config.prefix}reason\``;
+    else if (reason.length > 250) return `The unmute reason must not exceed 250 characters. Currently, it is ${reason.length}. `;
 
     for (let i in targets) {
         await bot.users.fetch(targets[i]).then(async user => {
@@ -453,11 +463,11 @@ exports.unmute = async (guild, targets, member, reason, bot) => {
                 if (targetMember) {
                     await targetMember.roles.remove(muteRole, `[${member.user.tag}] ${reason}`).catch(err => { })
                 }
-                await user.send(`You were unmuted in ${guild.name} by ${member.user.tag}\nReason: \`${reason}\``).catch(err => { })
+                await user.send(`You were unmuted in ${guild.name} by ${member.user.tag}\n**Reason:** ${reason}`).catch(err => { })
                 exports.modLogEvent(bot, guild, "UNMUTE", user, member.user, reason)
                 await datamanager.deleteData('mutes', { guild: guild.id, user: targets[i] })
                 outputMessage += `Successfully unmuted \`${user.tag}\`\n`;
-            } else{
+            } else {
                 outputMessage += `Failed to unmute \`${user.tag}\`: They aren't muted\n`
             }
         }).catch(err => {

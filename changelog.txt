@@ -1,3 +1,5 @@
+V3.2.0
+- Small aesthetic updates to the moderation system
 V3.1.0
 - You can now clear all messages after a particular message ID (including that message) with the clear command
 V3.0.0
