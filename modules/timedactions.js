@@ -45,7 +45,7 @@ async function cycleTempbans (bot) {
         async function failed () {
             newData = tempbans[i];
                 newData.unbanAttempts++;
-                if(newData.unbanAttempts > 200) {
+                if(newData.unbanAttempts > 2000) {
                     await dataManager.deleteData('tempbans', {_id: tempbans[i]._id})
                 } else {
                     await dataManager.writeData('tempbans', newData, tempbans[i])
@@ -80,7 +80,7 @@ async function cycleMutes (bot) {
         async function failed () {
             newData = mutes[i];
                 newData.unmuteAttempts++;
-                if(newData.unmuteAttempts > 200) {
+                if(newData.unmuteAttempts > 2000) {
                     await dataManager.deleteData('mutes', {_id: mutes[i]._id})
                 } else {
                     await dataManager.writeData('mutes', newData, mutes[i])
