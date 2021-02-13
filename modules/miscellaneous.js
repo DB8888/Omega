@@ -125,5 +125,5 @@ exports.remind = async (args, user) => {
     time = await timeConvert(args[1], { convertTo: 'ms' })
     if (!parseInt(time)) return `That doesn't look like a valid time`;
     await dataManager.writeData('reminders', { user: user.id, reminder: args.slice(2).join(' '), time: Date.now() + time }, { user: user.id, reminder: args.slice(2).join(' '), time: Date.now() + time })
-    return `I'll remind you in ${await timeConvert(args[1], { convertTo: 'long' })}:\n\`${args.slice(2).join(' ')}\``;
+    return `I'll remind you in ${await timeConvert(args[1], { convertTo: 'long' })}:\n${args.slice(2).join(' ')}`;
 }

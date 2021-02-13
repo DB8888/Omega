@@ -333,7 +333,7 @@ exports.tempban = async (guild, targets, member, reason, bot) => {
         })
 
     }
-    outputMessage += `**Tempban Reason:**\n${reason.split(' ').slice(1).join(' ')}\`\n**Duration:** \`${time}`;
+    outputMessage += `**Tempban Reason:**\n${reason.split(' ').slice(1).join(' ')}\n**Duration:** ${time}`;
     return outputMessage;
 }
 

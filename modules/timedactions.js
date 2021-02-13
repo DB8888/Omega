@@ -16,7 +16,7 @@ async function cycleReminders (bot) {
     const reminders = await dataManager.fetchData('reminders', {});
     for(let i in reminders){
         if(reminders[i].time < Date.now()){
-            bot.users.cache.get(reminders[i].user).send(`You asked me to remind you:\n\`${reminders[i].reminder}\``).catch(err => {})
+            bot.users.cache.get(reminders[i].user).send(`You asked me to remind you:\n${reminders[i].reminder}`).catch(err => {})
             dataManager.deleteData('reminders', {
                 _id: reminders[i]._id
             })
