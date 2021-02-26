@@ -306,7 +306,7 @@ exports.tempban = async (guild, targets, member, reason, bot) => {
                         if ((targetMemberModRole || targetMember.hasPermission('ADMINISTRATOR') || targetMember.hasPermission('KICK_MEMBERS') || targetMember.hasPermission('BAN_MEMBERS')) && !member.hasPermission('ADMINISTRATOR')) {
                             outputMessage += `Unable to tempban \`${targetMember.user.tag}\`: Only administrators can ban people with the moderator role and/or moderator permissions.\n`
                         } else {
-                            await targetMember.user.send(`You were temporarily banned from ${targetMember.guild.name} for ${time} by ${member.user.tag}.\nReason: ${reason.split(' ').slice(1).join(' ')}`).catch(err => { });
+                            await targetMember.user.send(`You were temporarily banned from ${targetMember.guild.name} for ${time} by ${member.user.tag}.\n**Reason:** ${reason.split(' ').slice(1).join(' ')}`).catch(err => { });
                             await targetMember.ban({ reason: `[${member.user.tag}] [${time}] ${reason.split(' ').slice(1).join(' ')}` });
                             exports.modLogEvent(bot, guild, `TEMP BAN`, targetMember.user, member.user, reason.split(' ').slice(1).join(' '), { words: time, expires: Date.now() + timeMs });
                             registerTempban(targetMember.user, guild, timeMs)
