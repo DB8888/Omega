@@ -18,6 +18,7 @@ const errorHandler = require('./modules/errorhandling.js');
 const moderation = require('./modules/moderation.js');
 const ownercommands = require('./modules/ownercommands.js');
 const dataManager = require('./modules/datamanagement')
+const automod = require('./modules/automod.js')
 
 //configure a web app, so that the repl can be kept alive
 const express = require('express');
@@ -42,6 +43,7 @@ bot.on('ready', () => {
     supportServer.runProcesses(bot);
     timedActions(bot);
     bot.user.setPresence({ activity: { name: `${bot.guilds.cache.size} servers` , type: 'WATCHING'}, status: 'online' })
+    automod(bot)
 })
 
 bot.on('message', async message => {
