@@ -2,10 +2,10 @@ const config = require('../config.js');
 const Discord = require('discord.js')
 
 exports.eval = async (executor, bot, message, args) => {
-    if (executor.id != config.owner) return 0;
+    if (executor.id != config.owner) return message.channel.send('no');
     let evaled;
     try {
-        evaled = eval(args.slice(1).join(' '));
+        evaled = await eval(args.slice(1).join(' '));
     } catch (error) {
         message.channel.send(`ERROR: \`\`\`\n${error}\n\`\`\``)
     }
