@@ -42,7 +42,7 @@ bot.on('ready', () => {
     bot.channels.cache.get(config.startupLoggingChannel).send(':white_check_mark: Omega has started');
     supportServer.runProcesses(bot);
     timedActions(bot);
-    bot.user.setPresence({ activity: { name: `${bot.guilds.cache.size} servers` , type: 'WATCHING'}, status: 'online' })
+    bot.user.setPresence({ activity: { name: `${bot.guilds.cache.size} servers | ${config.prefix}help` , type: 'WATCHING'}, status: 'online' })
     automod(bot)
 })
 
