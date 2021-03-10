@@ -10,4 +10,4 @@ V3.0.0
 Currently working on:
 - Nothing currently
 
-View the full changelog at https://github.com/DB8888/Omega
+View the full changelog at https://github.com/dinty1/Omega
