@@ -146,6 +146,7 @@ exports.snipe = async (msg, client) => {
             .setAuthor(`Sniped by ${msg.author.tag}`, msg.author.avatarURL())
             .addField("Author", author)
             .setColor(config.embedColour)
+            .setTimestamp(new Date(snipes[msg.channel.id].timestamp))
             msg.channel.send(resultEmbed)
     } else {
         msg.channel.send("No recently deleted messages found in this channel.");
