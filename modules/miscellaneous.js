@@ -1,6 +1,7 @@
 const config = require('../config.js');
 const Discord = require('discord.js');
 const dataManager = require('./datamanagement.js');
+var snipes = {};
 
 //poll command
 //note: sending messages directly from function because it needs to add reactions.
@@ -126,4 +127,27 @@ exports.remind = async (args, user) => {
     if (!parseInt(time)) return `That doesn't look like a valid time`;
     await dataManager.writeData('reminders', { user: user.id, reminder: args.slice(2).join(' '), time: Date.now() + time }, { user: user.id, reminder: args.slice(2).join(' '), time: Date.now() + time })
     return `I'll remind you in ${await timeConvert(args[1], { convertTo: 'long' })}:\n${args.slice(2).join(' ')}`;
+}
+
+//snipe
+exports.onMessageDelete = (msg) => {
+    snipes[msg.channel.id] = {
+        content: msg.content,
+        author: msg.author.id,
+        timestamp: msg.createdTimestamp
+    }
+}
+
+exports.snipe = async (msg, client) => {
+    if(snipes[msg.channel.id]) {
+        const author = await client.users.fetch(snipes[msg.channel.id].author);
+        const resultEmbed = new Discord.MessageEmbed()
+            .setDescription(snipes[msg.channel.id].content)
+            .setAuthor(`Sniped by ${msg.author.tag}`, msg.author.avatarURL())
+            .addField("Author", author)
+            .setColor(config.embedColour)
+            msg.channel.send(resultEmbed)
+    } else {
+        msg.channel.send("No recently deleted messages found in this channel.");
+    }
 }

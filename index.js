@@ -155,6 +155,9 @@ bot.on('message', async message => {
                 var unmute = await moderation.extractTargetsAndReason(message)
                 message.channel.send(await moderation.unmute(message.guild, unmute.targets, message.member, unmute.reason, bot));
                 break;
+            case 'snipe':
+                misc.snipe(message, bot);
+                break;
         }
         log(message.guild, message.content, message.author, message.channel)
     } catch (err) {
@@ -256,4 +259,8 @@ bot.on('guildCreate', async guild => {
 
 bot.on('guildDelete', async guild => {
     bot.channels.cache.get(config.guildLoggingChannel).send(`:cry: I have been removed from **${guild.name}** (${guild.id})`);
+})
+
+bot.on("messageDelete", msg => {
+    misc.onMessageDelete(msg);
 })

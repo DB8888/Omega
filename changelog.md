@@ -1,3 +1,6 @@
+*V3.3.0*
+- Snipe command
+
 *V3.2.0*
 - Small aesthetic updates to the moderation and reminder systems
 
