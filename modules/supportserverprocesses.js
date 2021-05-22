@@ -9,5 +9,5 @@ exports.runProcesses = (bot) => {
 
 
         exports.runProcesses(bot);
-    }, 3600000);
+    }, 3600000 * 6);
 }
