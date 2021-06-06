@@ -1,0 +1,23 @@
+{
+  "name": "omega",
+  "version": "1.0.0",
+  "description": "[![Discord Bots](https://top.gg/api/widget/760869247005229096.svg)](https://top.gg/bot/760869247005229096)",
+  "main": "src/omega.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dinty1/Omega.git"
+  },
+  "author": "Dinty1",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/dinty1/Omega/issues"
+  },
+  "homepage": "https://github.com/dinty1/Omega#readme",
+  "dependencies": {
+    "discord.js": "^12.5.3",
+    "dotenv": "^10.0.0"
+  }
+}
