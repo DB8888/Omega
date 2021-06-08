@@ -3,6 +3,7 @@ const Discord = require("discord.js");
 require("dotenv").config();
 const fs = require("fs");
 const Module = require("./modules/abstract/Module.js");
+const config = require("../config/config.js")
 
 // Setup Discord bot
 console.log("Setting up Discord stuff");
@@ -24,4 +25,4 @@ client.on("ready", () => {
 });
 
 // Import configuration
-client.config = JSON.parse(fs.readFileSync("config/config.json"));
+client.config = config;
