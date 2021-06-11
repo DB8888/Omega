@@ -49,7 +49,7 @@ bot.on('ready', () => {
 bot.on('message', async message => {
     
     if (message.channel.type === 'dm') {
-        bot.channels.cache.get(config.DMLoggingChannel).send(`${message.author}: ${message.content}`);
+        //bot.channels.cache.get(config.DMLoggingChannel).send(`${message.author}: ${message.content}`);
     }
     if (message.author.bot) return 0;
     //check if member should be muted
@@ -159,7 +159,7 @@ bot.on('message', async message => {
                 misc.snipe(message, bot);
                 break;
         }
-        log(message.guild, message.content, message.author, message.channel)
+        //log(message.guild, message.content, message.author, message.channel)
     } catch (err) {
         message.channel.send(await errorHandler.reportError(err, message.content, bot));
         console.log(err);
